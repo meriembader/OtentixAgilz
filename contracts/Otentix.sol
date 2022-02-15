@@ -5,12 +5,15 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract Otentix is ERC721, ERC721URIStorage, Ownable {
+
+contract Otentix is ERC721, ERC721URIStorage,  ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
-
+    using SafeMath for uint;
     Counters.Counter private _tokenIdCounter;
-
+    uint public MAX_PER_USER = 10;
     mapping(string => uint8) existingURIs;
 
     constructor() ERC721("Otentix", "NFT") {}
@@ -26,6 +29,15 @@ contract Otentix is ERC721, ERC721URIStorage, Ownable {
         _setTokenURI(tokenId, uri);
         existingURIs[uri] = 1;
     }
+
+    // mint multiple nft in the same transaction
+   function mint(uint amount) external {
+    require(balanceOf(msg.sender).add(amount) <= MAX_PER_USER, "exceed max per user");
+    for (uint256 i = 0; i < amount; i++) {
+      uint mintIndex = totalSupply();
+      _safeMint(msg.sender, mintIndex);
+    }
+  }
 
     // The following functions are overrides required by Solidity.
 
