@@ -46,7 +46,7 @@ contract Otentix is ERC721, ERC721URIStorage, Ownable {
     function isContentOwned(string memory uri) public view returns (bool) {
         return existingURIs[uri] == 1;
     }
-    function payToMint( address recipient,string memory metadataURI)public payable returns (uint256) {
+    function payToMint( address recipient,string memory metadataURI )public payable returns (uint256) {
        
         require(existingURIs[metadataURI] != 1, 'NFT already minted!');
         require (msg.value >= 0.05 ether, 'Need to pay up!');
@@ -54,13 +54,12 @@ contract Otentix is ERC721, ERC721URIStorage, Ownable {
         uint256 newItemId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         existingURIs[metadataURI] = 1;
-       for (uint256 i = 0; i < existingURIs[metadataURI]; i++) {
+
         _mint(recipient, newItemId);
         _setTokenURI(newItemId, metadataURI);
- }
+
         return newItemId;
     }
-
     function count() public view returns (uint256) {
         return _tokenIdCounter.current();
     }
