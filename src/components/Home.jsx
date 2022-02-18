@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import Otentix from '../artifacts/contracts/Otentix.sol/Otentix.json';
 
-const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+const contractAddress = '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9';
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -29,7 +29,7 @@ function Home() {
     //console.log("iciiiiiiiii ::::::::::::::::::::");
     const count = await contract.count();
     console.log("iciiiiiiiii ::::::::::::::::::::",count);
-    console.log("thiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiis",parseInt(count));
+    console.log("this the int count",parseInt(count));
     setTotalMinted(parseInt(count));
   };
 
@@ -67,7 +67,8 @@ function NFTImage({ tokenId, getCount }) {
 
   const getMintedStatus = async () => {
     const result = await contract.isContentOwned(metadataURI);
-    console.log('iciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',result)
+    console.log('metadarauri ==> ',metadataURI)
+    console.log('is minted ??!!== > look here ',result)
     setIsMinted(result);
   };
 
@@ -95,6 +96,7 @@ function NFTImage({ tokenId, getCount }) {
       <div className="card-body">
         <h5 className="card-title">ID #{tokenId}</h5>
         {!isMinted ? (
+          
           <button className="btn btn-primary" onClick={mintToken}>
             Mint
           </button>
