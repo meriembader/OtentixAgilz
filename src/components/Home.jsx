@@ -56,9 +56,9 @@ function Home() {
 function NFTImage({ tokenId, getCount }) {
   const contentId = 'Qmf2kq9RaoQobYYb2Bzpv2zNGDVft4tuf6k7znSGV2k86f';
   const metadataURI = `${contentId}/${tokenId}.json`;
-  console.log("==============+=========>", tokenId)
-  const imageURI = `https://ipfs.io/ipfs/${contentId}/${tokenId}.png`;
-  //const imageURI = `img/${tokenId}.png`;
+  console.log("this is the tokenId ====>>", tokenId);
+  const imageURI = `https://ipfs.io/ipfs/${metadataURI}`;
+ 
 
   const [isMinted, setIsMinted] = useState(false);
   useEffect(() => {
