@@ -1,1 +1,6 @@
-{"name":"sloppy-steve","description":"A drawing of sloppy steve","image":"https://ipfs.io/ipfs/QmfSRSFdtVDP5vqLAg1nSb44RFFRA1M8CPJVZro6QN2PVW","attributes":[{"beard":"","rarity":0.5}]}
+{   
+    "name":"sloppy-steve",
+    "description":"A drawing of sloppy steve",
+    "image":"https://ipfs.io/ipfs/QmfSRSFdtVDP5vqLAg1nSb44RFFRA1M8CPJVZro6QN2PVW",
+    "attributes":[{"beard":"","rarity":0.5}]
+}

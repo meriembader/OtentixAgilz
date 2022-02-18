@@ -40,7 +40,7 @@ contract Minter is ERC721Enumerable, Ownable {
     }
 
     for (uint256 i = 1; i <= _mintAmount; i++) {
-      _safeMint(recipient, supply + i);
+      _mint(recipient, supply + i);
     }
 
     }
