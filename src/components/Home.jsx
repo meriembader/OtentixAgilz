@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import Otentix from '../artifacts/contracts/Otentix.sol/Otentix.json';
 
-const contractAddress = '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318';
+const contractAddress = '0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0';
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -54,10 +54,10 @@ function Home() {
 }
 
 function NFTImage({ tokenId, getCount }) {
-  const contentId = 'QmYNuGHzCj95qa2ZiDmC4vGPSPwmbH3H9avW4gpuzfNGm4';
-  const metadataURI = `${contentId}/${tokenId}.png`;
+  const contentId = 'Qmf2kq9RaoQobYYb2Bzpv2zNGDVft4tuf6k7znSGV2k86f';
+  const metadataURI = `${contentId}/${tokenId}.json`;
   console.log("==============+=========>", tokenId)
-  const imageURI = `https://gateway.pinata.cloud/ipfs/${metadataURI}`;
+  const imageURI = `https://ipfs.io/ipfs/${contentId}/${tokenId}.png`;
   //const imageURI = `img/${tokenId}.png`;
 
   const [isMinted, setIsMinted] = useState(false);
