@@ -2,17 +2,17 @@
 pragma solidity >=0.5.3;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-contract Otentix is ERC721, ERC721URIStorage, Ownable {
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+
+contract Otentix is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable, ERC721Burnable {
     using Counters for Counters.Counter;
-
-    Counters.Counter private _tokenIdCounter;
-
     mapping(string => uint8) existingURIs;
+    Counters.Counter private _tokenIdCounter;
 
     constructor() ERC721("Otentix", "NFT") {}
 
@@ -20,12 +20,44 @@ contract Otentix is ERC721, ERC721URIStorage, Ownable {
         return "ipfs://";
     }
 
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+
     function safeMint(address to, string memory uri) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
-        existingURIs[uri] = 1;
+         existingURIs[uri] = 1;
+    }
+
+   function payToMint(
+        address recipient,
+        string memory metadataURI
+    ) public payable returns (uint256) {
+        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
+        require (msg.value >= 0.05 ether, 'Need to pay up!');
+
+        uint256 newItemId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        existingURIs[metadataURI] = 1;
+
+        _mint(recipient, newItemId);
+        _setTokenURI(newItemId, metadataURI);
+
+        return newItemId;
+    }
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+        internal
+        whenNotPaused
+        override(ERC721, ERC721Enumerable)
+    {
+        super._beforeTokenTransfer(from, to, tokenId);
     }
 
     // The following functions are overrides required by Solidity.
@@ -43,26 +75,20 @@ contract Otentix is ERC721, ERC721URIStorage, Ownable {
         return super.tokenURI(tokenId);
     }
 
-    function isContentOwned(string memory uri) public view returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721Enumerable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+       function isContentOwned(string memory uri) public view returns (bool) {
         return existingURIs[uri] == 1;
     }
-    function payToMint( address recipient,string memory metadataURI )public payable returns (uint256) {
-       
-        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
-        require (msg.value >= 0.05 ether, 'Need to pay up!');
-
-        uint256 newItemId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
-        existingURIs[metadataURI] = 1;
-
-        _mint(recipient, newItemId);
-        _setTokenURI(newItemId, metadataURI);
-
-        return newItemId;
-    }
-
-    
-    function count() public view returns (uint256) {
+       function count() public view returns (uint256) {
         return _tokenIdCounter.current();
     }
+
+
 }
