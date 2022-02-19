@@ -1,14 +1,12 @@
-// SPDX-License-Identifier: MIT
+/*// SPDX-License-Identifier: MIT
 pragma solidity >=0.5.3;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./Otentix.sol";
+
 
 contract Minter is ERC721Enumerable, Ownable {
 
-  using Strings for uint256;
-
-  
+  using Strings for uint256;  
   string public baseExtension = ".json";
   uint256 public cost = 100 ether;
   uint256 public maxSupply = 1000;
@@ -44,4 +42,4 @@ contract Minter is ERC721Enumerable, Ownable {
     }
 
     }
-}
+}*/
