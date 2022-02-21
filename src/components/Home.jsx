@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import Otentix from '../artifacts/contracts/Otentix.sol/Otentix.json';
 
-const contractAddress = '0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e';
+const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -55,7 +55,7 @@ function Home() {
 
 function NFTImage({ tokenId, getCount }) {
   const contentId = 'Qmf2kq9RaoQobYYb2Bzpv2zNGDVft4tuf6k7znSGV2k86f';
-  const metadataURI = `${contentId}/${tokenId}.json`;
+  const metadataURI = `${contentId}/${tokenId}.png`;
   console.log("this is the tokenId ====>>", tokenId);
   const imageURI = `https://ipfs.io/ipfs/${metadataURI}`;
  
