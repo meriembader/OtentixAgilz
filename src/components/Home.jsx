@@ -22,16 +22,16 @@ function Home() {
   const [totalMinted, setTotalMinted] = useState(0);
   useEffect(() => {
    
- //   getCount();
+    getCount();
   }, []);
 
- /* const getCount = async () => {
+  const getCount = async () => {
     //console.log("iciiiiiiiii ::::::::::::::::::::");
     const count = await contract.count();
     console.log("iciiiiiiiii ::::::::::::::::::::",count);
     console.log("this the int count",parseInt(count));
     setTotalMinted(parseInt(count));
-  };*/
+  };
 
   return (
     <div>
@@ -44,7 +44,7 @@ function Home() {
             .fill(0)
             .map((_, i) => (
               <div key={i} className="col-sm">
-                <NFTImage tokenId={i} />
+                <NFTImage tokenId={i} getCount={getCount} />
               </div>
             ))}
         </div>
@@ -53,10 +53,7 @@ function Home() {
   );
 }
 
-function NFTImage({ tokenId, _amount }) {
-  if (_amount <= 0) {
-    return;
-  }
+function NFTImage({ tokenId, getCount }) {
   const contentId = 'Qmf2kq9RaoQobYYb2Bzpv2zNGDVft4tuf6k7znSGV2k86f';
   const metadataURI = `${contentId}/${tokenId}.png`;
   console.log("this is the tokenId ====>>", tokenId);
@@ -80,13 +77,13 @@ function NFTImage({ tokenId, _amount }) {
     const addr = connection.address;
     console.log("contract address====>",addr);
     console.log("metadate uri=====>", metadataURI);
-    const result = await contract.payToMint(addr, _amount, {
+    const result = await contract.payToMint(addr, metadataURI, {
       value: ethers.utils.parseEther('0.05'),
     });
 
     await result.wait();
     getMintedStatus();
-   getCount();
+    getCount();
   };
 
   async function getURI() {

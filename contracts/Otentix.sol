@@ -41,26 +41,21 @@ uint256 public maxSupply = 1000;
          existingURIs[uri] = 1;
     }
   
-  function payToMint(address recipient, uint256 _mintAmount ) public payable {
-      //renvoie le npmbre totale des token stocké par le contat
-          uint256 supply = totalSupply();
-      //  require(existingURIs[metadataURI] != 1, 'NFT already minted!');
-        require(_mintAmount > 0);
-       require(_mintAmount <= maxMintAmount);
-       require(supply + _mintAmount <= maxSupply);
+  function payToMint(address recipient, string memory metadataURI ) public payable returns (uint256) {
+        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
         require (msg.value >= 0.05 ether, 'Need to pay up!');
 
-        //uint256 newItemId = _tokenIdCounter.current();
+        uint256 newItemId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
-   //     existingURIs[metadataURI] = 1;
-
-       for (uint256 i = 1; i <= _mintAmount; i++) {
-          _safeMint(recipient, supply + i);
-    }
-      //  _setTokenURI(newItemId, metadataURI);
+        existingURIs[metadataURI] = 1;
+for (uint256 i= 0; i<= 10 ; i++){
+      _mint(recipient, newItemId +i);
+}
+      
+        _setTokenURI(newItemId, metadataURI);
      
 
-      //  return newItemId;
+        return newItemId;
     }
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
         internal
