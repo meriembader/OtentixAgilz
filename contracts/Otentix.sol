@@ -11,18 +11,13 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract Otentix is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable, ERC721Burnable {
     using Counters for Counters.Counter;
-    mapping(string => uint8) existingURIs;
     Counters.Counter private _tokenIdCounter;
-    using Strings for uint256;  
-    string public baseExtension = ".json";
-    uint256 public cost = 100 ether;
-    uint256 public maxSupply = 1000;
-    uint256 public maxMintAmount = 20;
-  
-    mapping(address => bool) public whitelisted;
+  using Strings for uint256;  
+    mapping(string => uint8) existingURIs;
+   uint256 public maxMintAmount = 20;
+       uint256 public cost = 100 ether;
 
-
-
+uint256 public maxSupply = 1000;
 
     constructor() ERC721("Otentix", "NFT") {}
 
@@ -45,41 +40,27 @@ contract Otentix is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownabl
         _setTokenURI(tokenId, uri);
          existingURIs[uri] = 1;
     }
-
-  /*  function payToMint( address recipient,string memory metadataURI )public payable {
-   uint256 supply = totalSupply();
-      require(existingURIs[metadataURI] != 1, 'NFT already minted!');
-        require (msg.value >= 0.05 ether, 'Need to pay up!');
-    require(_mintAmount > 0);
-    require(_mintAmount <= maxMintAmount);
-    require(supply + _mintAmount <= maxSupply);
-
-    if (msg.sender != owner()) {
-        if(whitelisted[msg.sender] != true) {
-          require(msg.value >= cost * _mintAmount);
-        }
-    }
-
-    for (uint256 i = 1; i <= 20; i++) {
-      _mint(recipient, supply + i);
-    }
-    }*/
-  function payToMint(
-        address recipient,
-        string memory metadataURI
-    ) public payable returns (uint256) {
-        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
+  
+  function payToMint(address recipient, uint256 _mintAmount ) public payable {
+      //renvoie le npmbre totale des token stocké par le contat
+          uint256 supply = totalSupply();
+      //  require(existingURIs[metadataURI] != 1, 'NFT already minted!');
+        require(_mintAmount > 0);
+       require(_mintAmount <= maxMintAmount);
+       require(supply + _mintAmount <= maxSupply);
         require (msg.value >= 0.05 ether, 'Need to pay up!');
 
-        uint256 newItemId = _tokenIdCounter.current();
+        //uint256 newItemId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
-        existingURIs[metadataURI] = 1;
-for (uint256 i = 1; i <= 20; i++) {
-        _mint(recipient, newItemId + i);
-        _setTokenURI(newItemId, metadataURI);
-         }
+   //     existingURIs[metadataURI] = 1;
 
-        return newItemId;
+       for (uint256 i = 1; i <= _mintAmount; i++) {
+          _safeMint(recipient, supply + i);
+    }
+      //  _setTokenURI(newItemId, metadataURI);
+     
+
+      //  return newItemId;
     }
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
         internal
