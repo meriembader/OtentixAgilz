@@ -15,6 +15,9 @@ function App() {
        
         <a href="/Home">Meta Mask</a>
        <br></br>
+       <a href="/Mint">Mint Test</a
+       >
+       <br></br>
         <a href="#">My Ether wallet</a>
         <h3>Follow the link to connect 👇🏼</h3>
         <a href="#">Hardware wallets</a>

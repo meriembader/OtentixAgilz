@@ -14,12 +14,14 @@ contract Otentix is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownabl
     Counters.Counter private _tokenIdCounter;
   using Strings for uint256;  
     mapping(string => uint8) existingURIs;
+  //  mapping(string => uint8) newItemsId;
+ //   string  metadataURI;
    uint256 public maxMintAmount = 20;
        uint256 public cost = 100 ether;
   mapping(address => bool) public whitelisted;
 uint256 public maxSupply = 1000;
  
-
+     uint256 public _mintAmount= 1;
     constructor() ERC721("Otentix", "NFT") {}
 
     function _baseURI() internal pure override returns (string memory) {
@@ -40,29 +42,40 @@ uint256 public maxSupply = 1000;
          existingURIs[uri] = 1;
     }
 
-    function mintNft( address _to, uint _mintAmount) public payable{
+  /*  function mintNft( address _to, uint _mintAmount) public payable{
+        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
         uint256 supply = totalSupply();
+        require(newItemsId = _tokenIdCounter.current());
+          _tokenIdCounter.increment();
+        existingURIs[metadataURI] = 1;
         require(_mintAmount > 0);
         require ( _mintAmount <=maxMintAmount );
         require( supply + _mintAmount <= maxSupply);
 
       for ( uint256 i = 1; i <= _mintAmount ; i++){
           _safeMint(_to, supply + i);
+           _setTokenURI(newItemsId, metadataURI);
       }
-
+      return newItemsId;
+       
     }
-  
+  */
   function payToMint(address recipient, string memory metadataURI ) public payable returns (uint256) {
         require(existingURIs[metadataURI] != 1, 'NFT already minted!');
-        require (msg.value >= 0.05 ether, 'Need to pay up!');
-        uint256 newItemId = _tokenIdCounter.current();
+        require (msg.value >= 0.1 ether, 'Need to pay up!');
+         uint256 supply = totalSupply();
+        uint256 newItemsId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         existingURIs[metadataURI] = 1;
-//for (uint256 i= 0; i<= 10 ; i++){
-      _mint(recipient, newItemId);
-      _setTokenURI(newItemId, metadataURI);
-//}
-        return newItemId;
+        require(_mintAmount > 0);
+        require ( _mintAmount <=maxMintAmount );
+        require( supply + _mintAmount <= maxSupply);
+         for ( uint256 i = 1; i <= _mintAmount ; i++){
+         _mint(recipient, supply + i);
+       
+         }
+          _setTokenURI(newItemsId, metadataURI);
+        return newItemsId;
     }
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
         internal
