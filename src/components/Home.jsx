@@ -172,7 +172,7 @@ const fileSubmitHandler = (event) => {
          <button className="btn btn-secondary" >
             Taken! Show URI
           </button>
-        )}
+        )}   
       </div>
          <input type="file"  multiple onChange={MintHandler}/>
          <button  className="btn btn-primary"  onClick={mintToken}>mint</button>
