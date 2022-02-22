@@ -3,7 +3,7 @@ import React from 'react';
 import {BrowserRouter, Routes , Route } from 'react-router-dom';
 import Home from './components/Home';
 import WaletList from './components/waletList';
-
+import Mint from './components/Mint';
 function App() {
   return (
     <BrowserRouter>
@@ -12,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/"  element={<WaletList/>}  />
         <Route path="/Home" element={<Home />}></Route>
+        <Route path="/Mint" element={<Mint />}></Route>
       </Routes>
     </div>
     </BrowserRouter>

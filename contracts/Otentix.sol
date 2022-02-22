@@ -58,10 +58,9 @@ uint256 public maxSupply = 1000;
         uint256 newItemId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         existingURIs[metadataURI] = 1;
-//for (uint256 i= 0; i<= 10 ; i++){
       _mint(recipient, newItemId);
       _setTokenURI(newItemId, metadataURI);
-//}
+
         return newItemId;
     }
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
