@@ -126,7 +126,6 @@ function withdraw() public payable onlyOwner {
         require(_mintAmount > 0);
         require ( _mintAmount <=maxMintAmount );
         require( supply + _mintAmount <= maxSupply);
-
       for ( uint256 i = 1; i <= _mintAmount ; i++){
           _safeMint(_to, supply + i);
            _setTokenURI(newItemsId, metadataURI);
@@ -163,8 +162,5 @@ function withdraw() public payable onlyOwner {
         return _tokenIds.current();
     }
    
- 
-  
-
 
 }
