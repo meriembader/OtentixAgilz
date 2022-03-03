@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import Otentix from '../artifacts/contracts/Otentix.sol/Otentix.json';
 
-const contractAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0';
+const contractAddress = '0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44';
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -44,7 +44,7 @@ function Home() {
             .fill(0)
             .map((_, i) => (
               <div key={i} className="col-sm">
-               <NFTImage tokenId={i} />
+               <NFTImage/>
               </div>
             ))}
         </div>
@@ -54,24 +54,13 @@ function Home() {
 }
 
 function NFTImage({ tokenId, getCount }) {
-  const contentId = 'Qmf2kq9RaoQobYYb2Bzpv2zNGDVft4tuf6k7znSGV2k86f';
-  const metadataURI = `${contentId}/${tokenId}.png`;
-  console.log("this is the tokenId ====>>", tokenId);
-  const imageURI = `https://ipfs.io/ipfs/${metadataURI}`;
   const [files, setFiles] = useState('');
-   
-
-    //state for checking file size
-   // const [fileSize, setFileSize] = useState(true);
-    // for file upload progress message
-    const [ setFileUploadProgress] = useState(false);
-    //for displaying response message
-    const [setFileUploadResponse] = useState(null);
-
+  const contentId = 'Qmf2kq9RaoQobYYb2Bzpv2zNGDVft4tuf6k7znSGV2k86f';
+  const metadataURI = `${contentId}/${files[0]?.name}`;
+  const imageURI = `https://ipfs.io/ipfs/${metadataURI}`;
+  
 
 /** Upload Files  */
-
-
 const fileSubmitHandler = (event) => {
  event.preventDefault();
 };
@@ -83,32 +72,26 @@ const fileSubmitHandler = (event) => {
     
   }, [isMinted]);
 
-  /*const getMintedStatus = async () => {
+
+  const getMintedStatus = async () => {    
     const result = await contract.isContentOwned(metadataURI);
-    console.log('iciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',result)
-    setIsMinted(result);
-  };*/
-  const getMintedStatus = async () => {
-    const connection = contract.connect(signer);
-    const addr = connection.address;
-    const result = await contract.isContentOwned(metadataURI);
-    console.log('metadarauri ==> ',metadataURI)
     console.log('is minted ??!!== > look here ',result)
     setIsMinted(result);
   };
 
   const MintHandler = (event) => {
     setFiles(event.target.files);
-    console.log("gggggggggggggggg",files);
+    console.log("File name here ::=====>", event.target.files[0].name);
    };
   const mintNftHandler = async () => {
     try {
     const connection = contract.connect(signer);
     const addr = connection.address;
     console.log("contract address====>",addr);
-    console.log("metadate uri=====>", metadataURI);
+    console.log("metadate uri mintHandler*******=====>", metadataURI);
         console.log("Initialize payment");
-        let result = await contract.mintNFTs(files.length, { value: ethers.utils.parseEther("0.05") });
+        let result = await contract.mintNFTs(files.length, metadataURI,
+          { value: ethers.utils.parseEther("0.7") });
 
         console.log("Mining... please wait");
         await result.wait();
@@ -127,7 +110,6 @@ const fileSubmitHandler = (event) => {
     const result = await contract.payToMint(addr, metadataURI, {
       value: ethers.utils.parseEther('0.05'),
     });
-
     await result.wait();
     getMintedStatus();
     getCount();
@@ -138,20 +120,17 @@ async function getURI() {
     alert(uri);
   }
   return (
-
-    
     <div className="card" style={{ width: '18rem' }}>
       <form onSubmit={fileSubmitHandler}>
           <h1>NFT</h1>
           <img className="card-img-top" src={isMinted ? imageURI : 'img/placeholder.png'}></img>
       <div className="card-body">
       <input type="file"  multiple onChange={MintHandler}/>
-        <h5 className="card-title">ID #{tokenId}</h5>
+        <h5 className="card-title"> {files[0]?.name}</h5>
         {!isMinted ? (
          
          <button  className="btn btn-primary"  onClick={mintNftHandler}>mint</button>
-      
-      
+
         ) : (
           <button className="btn btn-secondary" onClick={getURI}>
             Taken! Show URI
