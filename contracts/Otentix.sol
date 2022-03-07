@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract Otentix is ERC721Enumerable, ERC721URIStorage, Ownable {
+contract Otentix is ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
       Counters.Counter private _tokenIdCounter;
     using SafeMath for uint256;
@@ -56,7 +56,7 @@ function reserveNFTs() public onlyOwner {
           _mintSingleNFT();
      }
 }*/
-function mintNFTs(uint _count, string memory metadataURI) public payable returns(uint) {
+function mintNFTs(uint _count) public payable {
      uint totalMinted = _tokenIds.current();
      //test 1 : have enough nfts for the caller to mint
      require(
@@ -75,22 +75,20 @@ function mintNFTs(uint _count, string memory metadataURI) public payable returns
      );
      
      for (uint i = 0; i < _count; i++) {
-            _mintSingleNFT(metadataURI);
-         //   _setTokenURI(totalMinted, metadataURI);
+            _mintSingleNFT();
      }
-     return totalMinted;
 }
 
-function _mintSingleNFT( string memory uri) private {
+function _mintSingleNFT() private {
   //get the current ID that hasn’t been minted yet
       uint newTokenID = _tokenIds.current();
       //assign the NFT ID to the account that called the function using _safemint
       _safeMint(msg.sender, newTokenID);
-      _setTokenURI(newTokenID, uri);
       // increment the token IDs counter by 1
       _tokenIds.increment();
-      
 }
+
+
 
 //to know which NFTs each user holds
 // return how many tokens a particular owner holds
@@ -114,47 +112,58 @@ function withdraw() public payable onlyOwner {
      require(success, "Transfer failed.");
 }
 
-   function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-        internal
-       
-        override(ERC721, ERC721Enumerable)
-    {
-        super._beforeTokenTransfer(from, to, tokenId);
-    }
-
-    // The following functions are overrides required by Solidity.
-
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
-        super._burn(tokenId);
-    }
-
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
-        return super.tokenURI(tokenId);
-    }
-
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721, ERC721Enumerable)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
-    }
-
    function isContentOwned(string memory uri) public view returns (bool) {
         return existingURIs[uri] == 1;
     }
 
+
+  /*  function mintNft( address _to, uint _mintAmount) public payable{
+        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
+        uint256 supply = totalSupply();
+        require(newItemsId = _tokenIdCounter.current());
+          _tokenIdCounter.increment();
+        existingURIs[metadataURI] = 1;
+        require(_mintAmount > 0);
+        require ( _mintAmount <=maxMintAmount );
+        require( supply + _mintAmount <= maxSupply);
+      for ( uint256 i = 1; i <= _mintAmount ; i++){
+          _safeMint(_to, supply + i);
+           _setTokenURI(newItemsId, metadataURI);
+      }
+      return newItemsId;
+       
+    }
+  */
+ /* function payToMint(address recipient, string memory metadataURI ) public payable returns (uint256) {
+        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
+        require (msg.value >= 0.1 ether, 'Need to pay up!');
+         uint256 supply = totalSupply();
+        uint256 newItemsId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        existingURIs[metadataURI] = 1;
+        require(_mintAmount > 0);
+        require ( _mintAmount <=maxMintAmount );
+        require( supply + _mintAmount <= maxSupply);
+         for ( uint256 i = 1; i <= _mintAmount ; i++){
+         _mint(recipient, supply + i);
+       
+         }
+          _setTokenURI(newItemsId, metadataURI);
+        return newItemsId;
+    }*/
+
+
     // The following functions are overrides required by Solidity.
 
+
+
+  
        function count() public view returns (uint256) {
         return _tokenIds.current();
     }
    
+ 
+  
+
 
 }
