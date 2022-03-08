@@ -10,6 +10,8 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
+// Use the previous contract
+import "./RoleControl.sol";
 contract Otentix is ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
       Counters.Counter private _tokenIdCounter;
@@ -78,7 +80,6 @@ function mintNFTs(uint _count) public payable {
             _mintSingleNFT();
      }
 }
-
 function _mintSingleNFT() private {
   //get the current ID that hasn’t been minted yet
       uint newTokenID = _tokenIds.current();
@@ -87,9 +88,6 @@ function _mintSingleNFT() private {
       // increment the token IDs counter by 1
       _tokenIds.increment();
 }
-
-
-
 //to know which NFTs each user holds
 // return how many tokens a particular owner holds
 function tokensOfOwner(address _owner) 
@@ -101,7 +99,6 @@ function tokensOfOwner(address _owner)
      for (uint i = 0; i < tokenCount; i++) {
           tokensId[i] = tokenOfOwnerByIndex(_owner, i);
      }
-
      return tokensId;
 }
 // to withdraw the contract’s entire balance
