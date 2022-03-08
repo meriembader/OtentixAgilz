@@ -39,16 +39,26 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
 
 
 }
- function _baseURI() internal 
-                    view 
-                    virtual 
-                    override 
-                    returns (string memory) {
-     return baseTokenURI;
+
+function reserveNFTs() public onlyOwner {
+  //check the total number of NFTs minted
+     uint totalMinted = _tokenIds.current();
+     //test :  if there are enough NFTs to reserve
+     require(
+        totalMinted.add(10) < MAX_SUPPLY, "Not enough NFTs"
+     );
+     // if test ok: proceed to mint 10 nft 
+     for (uint i = 0; i < 10; i++) {
+          _mintSingleNFT();
+     }
 }
-function setBaseURI(string memory _baseTokenURI) public onlyOwner {
-     baseTokenURI = _baseTokenURI;
-}
+ function _baseURI() internal view virtual override returns (string memory) {
+        return baseTokenURI;
+    }
+
+    function setBaseURI(string memory _baseTokenURI) public onlyOwner {
+        baseTokenURI = _baseTokenURI;
+    }
     // Allowlist addresses
     //called only by contract's owner and that can add one more addr to isAllowlistAdr mapping 
    function allowlistAddresses(address[] calldata wAddresses) public onlyOwner {
@@ -61,19 +71,6 @@ function setBaseURI(string memory _baseTokenURI) public onlyOwner {
         return ECDSA.recover(messageDigest, signature);
     }
 
-    /*
-function reserveNFTs() public onlyOwner {
-  //check the total number of NFTs minted
-     uint totalMinted = _tokenIds.current();
-     //test :  if there are enough NFTs to reserve
-     require(
-        totalMinted.add(10) < MAX_SUPPLY, "Not enough NFTs"
-     );
-     // if test ok: proceed to mint 10 nft 
-     for (uint i = 0; i < 10; i++) {
-          _mintSingleNFT();
-     }
-}*/
 function mintNFTs(uint _count) public payable {
      uint totalMinted = _tokenIds.current();
      //test 1 : have enough nfts for the caller to mint
@@ -96,29 +93,25 @@ function mintNFTs(uint _count) public payable {
             _mintSingleNFT();
      }
 }
-
-
 // Presale mints
 //fonction qui n'autorise que les adresses autorisées à créer.
-function preSale(uint _count) public payable {
-    uint totalMinted = _tokenIds.current();
-    uint preSalePrice = 0.005 ether;
-    uint preSaleMaxMint = 2;
+    function preSale(uint _count, bytes32 hash, bytes memory signature) public payable {
+        uint totalMinted = _tokenIds.current();
+        uint preSalePrice = 0.005 ether;
+        uint preSaleMaxMint = 2;
 
-    require(totalMinted.add(_count) <= MAX_SUPPLY, 
-            "Not enough NFTs left!");
-    require(_count >0 && _count <= preSaleMaxMint, 
-            "Cannot mint specified number of NFTs.");
-    require(msg.value >= preSalePrice.mul(_count), 
-            "Not enough ether to purchase NFTs.");
-    require(isAllowlistAddress[msg.sender], 
-            "Address is not allowlisted");
-    for (uint i = 0; i < _count; i++) {
-        _mintSingleNFT();
+        require(totalMinted.add(_count) <= MAX_SUPPLY, "Not enough NFTs left!");
+        require(_count >0 && _count <= preSaleMaxMint, "Cannot mint specified number of NFTs.");
+        require(msg.value >= preSalePrice.mul(_count), "Not enough ether to purchase NFTs.");
+        require(recoverSigner(hash, signature) == owner(), "Address is not allowlisted");
+        require(!signatureUsed[signature], "Signature has already been used.");
+
+        for (uint i = 0; i < _count; i++) {
+            _mintSingleNFT();
+        }
+
+        signatureUsed[signature] = true;
     }
-
-    isAllowlistAddress[msg.sender] = false;
-}
 
 function _mintSingleNFT() private {
   //get the current ID that hasn’t been minted yet
@@ -130,21 +123,22 @@ function _mintSingleNFT() private {
 }
 //to know which NFTs each user holds
 // return how many tokens a particular owner holds
-function tokensOfOwner(address _owner) 
-         external 
-         view 
-         returns (uint[] memory) {
-     uint tokenCount = balanceOf(_owner);
-     uint[] memory tokensId = new uint256[](tokenCount);
-     for (uint i = 0; i < tokenCount; i++) {
-          tokensId[i] = tokenOfOwnerByIndex(_owner, i);
-     }
-     return tokensId;
-}
+
+    function tokensOfOwner(address _owner) external view returns (uint[] memory) {
+
+        uint tokenCount = balanceOf(_owner);
+        uint[] memory tokensId = new uint256[](tokenCount);
+
+        for (uint i = 0; i < tokenCount; i++) {
+            tokensId[i] = tokenOfOwnerByIndex(_owner, i);
+        }
+        return tokensId;
+    }
+
 
 
 // to withdraw the contract’s entire balance
-    function withdraw() public payable onlyOwner {
+      function withdraw() public payable onlyOwner {
         uint balance = address(this).balance;
         require(balance > 0, "No ether left to withdraw");
 
