@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 // Use the previous contract
 import "./RoleControl.sol";
@@ -28,7 +29,11 @@ contract Otentix is ERC721Enumerable, Ownable {
     using Strings for uint256;  
     //list of existing uri
     mapping(string => uint8) existingURIs;
-   
+
+    //track all adr alloawed
+    mapping(address => bool) public isAllowlistAddress;
+      mapping(bytes => bool) public signatureUsed;
+  
 constructor(string memory baseURI) ERC721("Otentix", "nft") {
      setBaseURI(baseURI);
 
@@ -44,6 +49,17 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
 function setBaseURI(string memory _baseTokenURI) public onlyOwner {
      baseTokenURI = _baseTokenURI;
 }
+    // Allowlist addresses
+    //called only by contract's owner and that can add one more addr to isAllowlistAdr mapping 
+   function allowlistAddresses(address[] calldata wAddresses) public onlyOwner {
+    for (uint i = 0; i < wAddresses.length; i++) {
+        isAllowlistAddress[wAddresses[i]] = true;
+    }
+}
+ function recoverSigner(bytes32 hash, bytes memory signature) public pure returns (address) {
+        bytes32 messageDigest = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
+        return ECDSA.recover(messageDigest, signature);
+    }
 
     /*
 function reserveNFTs() public onlyOwner {
@@ -80,6 +96,30 @@ function mintNFTs(uint _count) public payable {
             _mintSingleNFT();
      }
 }
+
+
+// Presale mints
+//fonction qui n'autorise que les adresses autorisées à créer.
+function preSale(uint _count) public payable {
+    uint totalMinted = _tokenIds.current();
+    uint preSalePrice = 0.005 ether;
+    uint preSaleMaxMint = 2;
+
+    require(totalMinted.add(_count) <= MAX_SUPPLY, 
+            "Not enough NFTs left!");
+    require(_count >0 && _count <= preSaleMaxMint, 
+            "Cannot mint specified number of NFTs.");
+    require(msg.value >= preSalePrice.mul(_count), 
+            "Not enough ether to purchase NFTs.");
+    require(isAllowlistAddress[msg.sender], 
+            "Address is not allowlisted");
+    for (uint i = 0; i < _count; i++) {
+        _mintSingleNFT();
+    }
+
+    isAllowlistAddress[msg.sender] = false;
+}
+
 function _mintSingleNFT() private {
   //get the current ID that hasn’t been minted yet
       uint newTokenID = _tokenIds.current();
@@ -101,65 +141,28 @@ function tokensOfOwner(address _owner)
      }
      return tokensId;
 }
+
+
 // to withdraw the contract’s entire balance
-function withdraw() public payable onlyOwner {
-     uint balance = address(this).balance;
-     require(balance > 0, "No ether left to withdraw");
-     (bool success, ) = (msg.sender).call{value: balance}("");
-     require(success, "Transfer failed.");
-}
+    function withdraw() public payable onlyOwner {
+        uint balance = address(this).balance;
+        require(balance > 0, "No ether left to withdraw");
+
+        (bool success, ) = (msg.sender).call{value: balance}("");
+        require(success, "Transfer failed.");
+    }
 
    function isContentOwned(string memory uri) public view returns (bool) {
         return existingURIs[uri] == 1;
     }
 
-
-  /*  function mintNft( address _to, uint _mintAmount) public payable{
-        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
-        uint256 supply = totalSupply();
-        require(newItemsId = _tokenIdCounter.current());
-          _tokenIdCounter.increment();
-        existingURIs[metadataURI] = 1;
-        require(_mintAmount > 0);
-        require ( _mintAmount <=maxMintAmount );
-        require( supply + _mintAmount <= maxSupply);
-      for ( uint256 i = 1; i <= _mintAmount ; i++){
-          _safeMint(_to, supply + i);
-           _setTokenURI(newItemsId, metadataURI);
-      }
-      return newItemsId;
-       
-    }
-  */
- /* function payToMint(address recipient, string memory metadataURI ) public payable returns (uint256) {
-        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
-        require (msg.value >= 0.1 ether, 'Need to pay up!');
-         uint256 supply = totalSupply();
-        uint256 newItemsId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
-        existingURIs[metadataURI] = 1;
-        require(_mintAmount > 0);
-        require ( _mintAmount <=maxMintAmount );
-        require( supply + _mintAmount <= maxSupply);
-         for ( uint256 i = 1; i <= _mintAmount ; i++){
-         _mint(recipient, supply + i);
-       
-         }
-          _setTokenURI(newItemsId, metadataURI);
-        return newItemsId;
-    }*/
-
-
     // The following functions are overrides required by Solidity.
 
-
-
-  
        function count() public view returns (uint256) {
         return _tokenIds.current();
     }
-   
- 
+
+
   
 
 
