@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import Otentix from '../artifacts/contracts/Otentix.sol/Otentix.json';
 
-const contractAddress = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
+const contractAddress = '0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0';
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
