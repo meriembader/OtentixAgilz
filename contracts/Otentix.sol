@@ -31,7 +31,7 @@ contract Otentix is ERC721Enumerable, Ownable {
     mapping(string => uint8) existingURIs;
 
     //track all adr alloawed
-    mapping(address => bool) public isAllowlistAddress;
+mapping(address => bool) public isAllowlistAddress;
       mapping(bytes => bool) public signatureUsed;
   
 constructor(string memory baseURI) ERC721("Otentix", "nft") {
@@ -71,6 +71,8 @@ function reserveNFTs() public onlyOwner {
         return ECDSA.recover(messageDigest, signature);
     }
 
+    
+
 function mintNFTs(uint _count) public payable {
      uint totalMinted = _tokenIds.current();
      //test 1 : have enough nfts for the caller to mint
@@ -95,24 +97,27 @@ function mintNFTs(uint _count) public payable {
 }
 // Presale mints
 //fonction qui n'autorise que les adresses autorisées à créer.
-    function preSale(uint _count, bytes32 hash, bytes memory signature) public payable {
-        uint totalMinted = _tokenIds.current();
-        uint preSalePrice = 0.005 ether;
-        uint preSaleMaxMint = 2;
+function preSale(uint _count, bytes32 hash, bytes memory signature) public payable {
+    uint totalMinted = _tokenIds.current();
+    uint preSalePrice = 0.005 ether;
+    uint preSaleMaxMint = 2;
 
-        require(totalMinted.add(_count) <= MAX_SUPPLY, "Not enough NFTs left!");
-        require(_count >0 && _count <= preSaleMaxMint, "Cannot mint specified number of NFTs.");
-        require(msg.value >= preSalePrice.mul(_count), "Not enough ether to purchase NFTs.");
-        require(recoverSigner(hash, signature) == owner(), "Address is not allowlisted");
-        require(!signatureUsed[signature], "Signature has already been used.");
+    require(totalMinted.add(_count) <= MAX_SUPPLY, 
+            "Not enough NFTs left!");
+    require(_count >0 && _count <= preSaleMaxMint, 
+            "Cannot mint specified number of NFTs.");
+    require(msg.value >= preSalePrice.mul(_count), 
+           "Not enough ether to purchase NFTs.");
+    require(recoverSigner(hash, signature) == owner(), 
+            "Address is not allowlisted");
+    require(!signatureUsed[signature], 
+            "Signature has already been used.");
 
-        for (uint i = 0; i < _count; i++) {
-            _mintSingleNFT();
-        }
-
-        signatureUsed[signature] = true;
+    for (uint i = 0; i < _count; i++) {
+        _mintSingleNFT();
     }
-
+    signatureUsed[signature] = true;
+}
 function _mintSingleNFT() private {
   //get the current ID that hasn’t been minted yet
       uint newTokenID = _tokenIds.current();
@@ -155,6 +160,7 @@ function _mintSingleNFT() private {
        function count() public view returns (uint256) {
         return _tokenIds.current();
     }
+
 
 
   
