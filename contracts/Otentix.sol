@@ -29,17 +29,14 @@ contract Otentix is ERC721Enumerable, Ownable {
     using Strings for uint256;  
     //list of existing uri
     mapping(string => uint8) existingURIs;
-
     //track all adr alloawed
 mapping(address => bool) public isAllowlistAddress;
+// will track if a particular signature has already been used to mint
       mapping(bytes => bool) public signatureUsed;
   
 constructor(string memory baseURI) ERC721("Otentix", "nft") {
      setBaseURI(baseURI);
-
-
 }
-
 function reserveNFTs() public onlyOwner {
   //check the total number of NFTs minted
      uint totalMinted = _tokenIds.current();
@@ -59,13 +56,17 @@ function reserveNFTs() public onlyOwner {
     function setBaseURI(string memory _baseTokenURI) public onlyOwner {
         baseTokenURI = _baseTokenURI;
     }
-    // Allowlist addresses
+    // Allowlist addresses pour assuer qu'un wallet ne peut minté qu'une seule fois 
     //called only by contract's owner and that can add one more addr to isAllowlistAdr mapping 
+    //ne peut etre appellé que par l'owner du contrat
    function allowlistAddresses(address[] calldata wAddresses) public onlyOwner {
     for (uint i = 0; i < wAddresses.length; i++) {
         isAllowlistAddress[wAddresses[i]] = true;
     }
 }
+
+// get the hashed addr of alowlist and the signature as argument 
+// ==> output the addr of the signer
  function recoverSigner(bytes32 hash, bytes memory signature) public pure returns (address) {
         bytes32 messageDigest = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
         return ECDSA.recover(messageDigest, signature);
@@ -108,6 +109,8 @@ function preSale(uint _count, bytes32 hash, bytes memory signature) public payab
             "Cannot mint specified number of NFTs.");
     require(msg.value >= preSalePrice.mul(_count), 
            "Not enough ether to purchase NFTs.");
+
+           //test to check if addr of the signer is allowed 
     require(recoverSigner(hash, signature) == owner(), 
             "Address is not allowlisted");
     require(!signatureUsed[signature], 
@@ -116,6 +119,7 @@ function preSale(uint _count, bytes32 hash, bytes memory signature) public payab
     for (uint i = 0; i < _count; i++) {
         _mintSingleNFT();
     }
+    //track  signature has already been used to mint
     signatureUsed[signature] = true;
 }
 function _mintSingleNFT() private {

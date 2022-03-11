@@ -7,16 +7,16 @@ const main = async () => {
         '0x15d34aaf54267db7d7c367839aaf71a00a2c6a65',
         '0x9965507d1a55bcc2695c58ba16fb37d819b0a4dc',
     ];
-    const owner = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
+//  const owner = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
     //ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
     const privateKey = 'ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
-    
+  //====>  // àfaire : voir si ether.wallet s'il accepte autre arg or la privateKey?!!!!!
     const signer = new ethers.Wallet(privateKey);
     console.log("this is the signer", signer)
     console.log("thiis is signer address",signer.address)
    // Get first allowlisted address
 //let message = allowlistedAddresses[0];
-let message = "émilie et brono";
+let message = "Hello agilz";
 console.log("this is the message ", message)
 // Compute hash of the address
 let messageHash = ethers.utils.id(message);
