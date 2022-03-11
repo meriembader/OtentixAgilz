@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import Otentix from '../artifacts/contracts/Otentix.sol/Otentix.json';
 
-const contractAddress = '0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0';
+const contractAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -108,7 +108,7 @@ const fileSubmitHandler = (event) => {
     console.log("contract address====>",addr);
     console.log("metadate uri=====>", metadataURI);
         console.log("Initialize payment");
-        let result = await contract.preSale(files.length, { value: ethers.utils.parseEther("0.05") });
+        let result = await contract.mintNFTs(files.length, { value: ethers.utils.parseEther("0.05") });
 
         console.log("Mining... please wait");
         await result.wait();
