@@ -65,15 +65,19 @@ function reserveNFTs() public onlyOwner {
     }
 }
 
+
+
 // get the hashed addr of alowlist and the signature as argument 
 // ==> output the addr of the signer
  function recoverSigner(bytes32 hash, bytes memory signature) public pure returns (address) {
         bytes32 messageDigest = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
         return ECDSA.recover(messageDigest, signature);
     }
-
+    // use this function to get the hash of any string
+    function getHash(string memory str) public pure returns (bytes32) {
+        return keccak256(abi.encodePacked(str));
+    }
     
-
 function mintNFTs(uint _count) public payable {
      uint totalMinted = _tokenIds.current();
      //test 1 : have enough nfts for the caller to mint
