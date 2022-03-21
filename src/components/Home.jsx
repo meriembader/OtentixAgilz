@@ -7,7 +7,6 @@ import Otentix from '../artifacts/contracts/Otentix.sol/Otentix.json';
 const contractAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
-
 // get the end user
 const signer = provider.getSigner();
 console.log("this is the signer", signer);
@@ -15,7 +14,6 @@ console.log("this is the  Otentix.abi", Otentix.abi);
 console.log("this is the  contractAddress",contractAddress);
 // get the smart contract
 const contract = new ethers.Contract(contractAddress, Otentix.abi, signer);
-
 
 function Home() {
 
@@ -32,7 +30,6 @@ function Home() {
     console.log("this the int count",parseInt(count));
     setTotalMinted(parseInt(count));
   };
-
   return (
     <div>
       <WalletBalance />

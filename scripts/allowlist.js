@@ -15,8 +15,8 @@ const main = async () => {
     console.log("this is the signer", signer)
     console.log("thiis is signer address",signer.address)
    // Get first allowlisted address
-//let message = allowlistedAddresses[0];
-let message = "Hello agilz";
+let message = allowlistedAddresses[0];
+//let message = "Hello agilz";
 console.log("this is the message ", message)
 // Compute hash of the address
 let messageHash = ethers.utils.id(message);
