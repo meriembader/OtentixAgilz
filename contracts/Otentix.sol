@@ -65,8 +65,6 @@ function reserveNFTs() public onlyOwner {
     }
 }
 
-
-
 // get the hashed addr of alowlist and the signature as argument 
 // ==> output the addr of the signer
  function recoverSigner(bytes32 hash, bytes memory signature) public pure returns (address) {
@@ -104,15 +102,10 @@ function mintNFTs(uint _count) public payable {
 //fonction qui n'autorise que les adresses autorisées à créer.
 function preSale(uint _count, bytes32 hash, bytes memory signature) public payable {
     uint totalMinted = _tokenIds.current();
-    uint preSalePrice = 0.005 ether;
-    uint preSaleMaxMint = 2;
+   
 
     require(totalMinted.add(_count) <= MAX_SUPPLY, 
             "Not enough NFTs left!");
-    require(_count >0 && _count <= preSaleMaxMint, 
-            "Cannot mint specified number of NFTs.");
-    require(msg.value >= preSalePrice.mul(_count), 
-           "Not enough ether to purchase NFTs.");
 
            //test to check if addr of the signer is allowed 
     require(recoverSigner(hash, signature) == owner(), 
@@ -147,8 +140,6 @@ function _mintSingleNFT() private {
         }
         return tokensId;
     }
-
-
 
 // to withdraw the contract’s entire balance
       function withdraw() public payable onlyOwner {
