@@ -18,6 +18,7 @@ import Author from "../themes/author";
 import WalletConnect from "../themes/wallet-connect";
 import Create from "../themes/create";
 import Login from "../themes/login";
+import Metamask from "../themes/Metamask";
 import Signup from "../themes/signup";
 import Contact from "../themes/contact";
 
@@ -35,6 +36,7 @@ class MyRouts extends React.Component {
             <Route exact path="/auctions" component={Auctions} />
             <Route exact path="/item-details" component={ItemDetails} />
             <Route exact path="/activity" component={Activity} />
+            <Route exact path="/Metamask" component={Metamask} />
             <Route exact path="/blog" component={Blog} />
             <Route exact path="/blog-single" component={BlogSingle} />
             <Route exact path="/help-center" component={HelpCenter} />

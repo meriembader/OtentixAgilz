@@ -125,6 +125,14 @@ body {
   background-color: var(--primary-bg-color);
 }
 
+element.style {
+}
+img.metamask {
+  height: 20%;
+  width: 60%;
+  margin-left: 120px;
+}
+
 body.odd {
   background-color: var(--secondary-bg-color);
 }
