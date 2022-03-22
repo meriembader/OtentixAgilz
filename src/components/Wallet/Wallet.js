@@ -1,13 +1,12 @@
-import React, { Component ,useState } from 'react';
+import React, { Component, useEffect, useState   } from 'react';
 
-//import BASE_URL from '../../../json-server/db.json';
-//const BASE_URL = "";
 
 
 
 class Activity extends Component {
-  
-    
+
+
+
     render() {
         return (
             <section className="wallet-connect-area">
@@ -28,7 +27,7 @@ class Activity extends Component {
                                 <div  className="col-12 col-md-6 col-lg-4 item">
                                     {/* Single Wallet */}
                                     <div className="card single-wallet">
-                                        <a className="d-block text-center" href="/login">
+                                        <a className="d-block text-center"href="/Metamask" >
                                             <img className="avatar-lg" src="/img/metamask.png" alt="" />
                                             <h4 className="mb-0">MetaMask</h4>
                                             <p>A browser extension with great flexibility. The web's most popular wallet</p>
