@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.5.3;
+pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 // Use the previous contract
 import "./RoleControl.sol";
-contract Otentix is ERC721Enumerable, Ownable {
+contract Otentix is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
       Counters.Counter private _tokenIdCounter;
     using SafeMath for uint256;
@@ -33,11 +33,15 @@ contract Otentix is ERC721Enumerable, Ownable {
 mapping(address => bool) public isAllowlistAddress;
 // will track if a particular signature has already been used to mint
       mapping(bytes => bool) public signatureUsed;
-  
+// mapping to insure that any token has a unique URI
+    mapping(string => uint8) hashes;
 constructor(string memory baseURI) ERC721("Otentix", "nft") {
      setBaseURI(baseURI);
 }
-function reserveNFTs() public onlyOwner {
+
+
+
+/*function reserveNFTs() public onlyOwner {
   //check the total number of NFTs minted
      uint totalMinted = _tokenIds.current();
      //test :  if there are enough NFTs to reserve
@@ -48,7 +52,7 @@ function reserveNFTs() public onlyOwner {
      for (uint i = 0; i < 10; i++) {
           _mintSingleNFT();
      }
-}
+}*/
  function _baseURI() internal view virtual override returns (string memory) {
         return baseTokenURI;
     }
@@ -56,6 +60,23 @@ function reserveNFTs() public onlyOwner {
     function setBaseURI(string memory _baseTokenURI) public onlyOwner {
         baseTokenURI = _baseTokenURI;
     }
+
+  function isContentOwned(string memory hash) public view returns (bool) {
+        return hashes[hash] == 1;
+    }
+
+    function mintHashNFT(address recipient , string memory hash) public returns (uint256) {
+      require(hashes[hash] != 1, 'NFT already minted!');
+        hashes[hash] = 1;
+        _tokenIds.increment();
+        uint256 newItemId = _tokenIds.current();
+        _mint(recipient, newItemId);
+        _setTokenURI(newItemId, hash);
+    
+     return newItemId;
+}
+
+
     // Allowlist addresses pour assuer qu'un wallet ne peut minté qu'une seule fois 
     //called only by contract's owner and that can add one more addr to isAllowlistAdr mapping 
     //ne peut etre appellé que par l'owner du contrat
@@ -71,7 +92,7 @@ function reserveNFTs() public onlyOwner {
         bytes32 messageDigest = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
         return ECDSA.recover(messageDigest, signature);
     }
-    // use this function to get the hash of any string
+    // use this function to  hash  string
     function getHash(string memory str) public pure returns (bytes32) {
         return keccak256(abi.encodePacked(str));
     }
@@ -127,6 +148,8 @@ function _mintSingleNFT() private {
       // increment the token IDs counter by 1
       _tokenIds.increment();
 }
+
+
 //to know which NFTs each user holds
 // return how many tokens a particular owner holds
 
@@ -150,9 +173,7 @@ function _mintSingleNFT() private {
         require(success, "Transfer failed.");
     }
 
-   function isContentOwned(string memory uri) public view returns (bool) {
-        return existingURIs[uri] == 1;
-    }
+ 
 
     // The following functions are overrides required by Solidity.
 
@@ -161,6 +182,34 @@ function _mintSingleNFT() private {
     }
 
 
+   function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+        internal
+        override(ERC721, ERC721Enumerable)
+    {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+        super._burn(tokenId);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721Enumerable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
 
   
 

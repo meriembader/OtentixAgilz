@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Header from '../components/Header/Header';
 import Breadcrumb from '../components/Breadcrumb/Breadcrumb';
 import Wallet from '../components/Wallet/Wallet';
+
 import Footer from '../components/Footer/Footer';
 import ModalSearch from '../components/Modal/ModalSearch';
 import ModalMenu from '../components/Modal/ModalMenu';
@@ -15,6 +16,7 @@ class WalletConnect extends Component {
                 <Header />
                 <Breadcrumb title="Wallet Connect" subpage="Pages" page="Wallet Connect" />
                 <Wallet />
+             
                 <Footer />
                 <ModalSearch />
                 <ModalMenu />

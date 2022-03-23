@@ -9,6 +9,8 @@ import ModalMenu from '../components/Modal/ModalMenu';
 import Scrollup from '../components/Scrollup/Scrollup';
 
 class Metamask extends Component {
+
+    
     render() {
         return (
             <div className="main">
