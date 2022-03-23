@@ -1,8 +1,42 @@
-import React, { Component } from 'react';
-
-class metamask extends Component {
- 
-    render() {
+import React, {useEffect, useState  } from 'react';
+import { useHistory } from "react-router-dom";
+const Metamask = (props) => {
+    const [isConnecting, setIsConnecting] = useState(false);
+    const history = useHistory();                 
+  
+    const detectProvider = () => {
+      let provider;
+      if (window.ethereum) {
+        provider = window.ethereum;
+      } else if (window.web3) {
+        provider = window.web3.currentProvider;
+      } else {
+        window.alert("No Ethereum browser detected! Check out MetaMask");
+      }
+      return provider;
+    };
+  
+    const onLoginHandler = async () => {
+      const provider = detectProvider();
+      if (provider) {
+        if (provider !== window.ethereum) {
+          console.error(
+            "Not window.ethereum provider. Do you have multiple wallet installed ?"
+          );
+        }
+        setIsConnecting(true);
+        await provider.request({
+          method: "eth_requestAccounts",
+        });
+        setIsConnecting(false);
+        history.push("/wallet-connect")
+      }
+      history.push("/")
+   //   props.onLogin(provider);
+    };
+  
+  
+    
         return (
             <section className="author-area">
                 <div className="container">
@@ -23,9 +57,9 @@ class metamask extends Component {
                                             
                                             <img className="metamask" src="/img/metamask.png" alt="" />  
                                             <div className="col-12">
-                                        <button className="btn w-100 mt-3 mt-sm-4" type="submit">Connect to MetaMask</button>
+                                            <button className="btn w-100 mt-3 mt-sm-4" onClick={onLoginHandler} >Connect to MetaMask</button>
                                        
-                             
+                     
                                   
                                    
                                 </div>
@@ -37,7 +71,7 @@ class metamask extends Component {
              
             </section>
         );
-    }
+    
 }
 
-export default metamask;
+export default Metamask;
