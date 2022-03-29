@@ -37,9 +37,7 @@ mapping(address => bool) public isAllowlistAddress;
     mapping(string => uint8) hashes;
 constructor(string memory baseURI) ERC721("Otentix", "nft") {
      setBaseURI(baseURI);
-}
-
-
+} 
 
 /*function reserveNFTs() public onlyOwner {
   //check the total number of NFTs minted
@@ -60,11 +58,6 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
     function setBaseURI(string memory _baseTokenURI) public onlyOwner {
         baseTokenURI = _baseTokenURI;
     }
-
-  function isContentOwned(string memory hash) public view returns (bool) {
-        return hashes[hash] == 1;
-    }
-
     function mintHashNFT(address recipient , string memory hash) public returns (uint256) {
       require(hashes[hash] != 1, 'NFT already minted!');
         hashes[hash] = 1;
@@ -75,7 +68,9 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
     
      return newItemId;
 }
-
+ function isContentOwned(string memory hash) public view returns (bool) {
+        return hashes[hash] == 1;
+    }
 
     // Allowlist addresses pour assuer qu'un wallet ne peut minté qu'une seule fois 
     //called only by contract's owner and that can add one more addr to isAllowlistAdr mapping 
@@ -124,7 +119,6 @@ function mintNFTs(uint _count) public payable {
 function preSale(uint _count, bytes32 hash, bytes memory signature) public payable {
     uint totalMinted = _tokenIds.current();
    
-
     require(totalMinted.add(_count) <= MAX_SUPPLY, 
             "Not enough NFTs left!");
 
@@ -173,8 +167,6 @@ function _mintSingleNFT() private {
         require(success, "Transfer failed.");
     }
 
- 
-
     // The following functions are overrides required by Solidity.
 
        function count() public view returns (uint256) {
@@ -210,8 +202,4 @@ function _mintSingleNFT() private {
     {
         return super.supportsInterface(interfaceId);
     }
-
-  
-
-
 }

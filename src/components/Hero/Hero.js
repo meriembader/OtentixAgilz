@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
 const initData = {
-    pre_heading: "NetStorm",
+    pre_heading: "Agilz",
     heading: "Discover, collect, and sell extraordinary NFTs",
     content: "Explore on the world's best & largest NFT marketplace",
     btn_1: "Explore",
-    btn_2: "Create"
+    btn_2: "upload NFT"
 }
 
 class Hero extends Component {
