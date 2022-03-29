@@ -1,5 +1,7 @@
 const ethers = require('ethers');
+const hre = require("hardhat");
 const main = async () => {
+  
     const hash = [
         'QmdEcRTukQ7rCKP1FopSWMhCZqBFGM7hBB6xgJgBZp5FNk',
         'QmTKvqDUGUEvdxn8FiHB5yrhWdmkd9VeoDSg72dcmCfk4f',
@@ -12,6 +14,7 @@ const main = async () => {
     const privateKey = 'ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
   //====>  // àfaire : voir si ether.wallet s'il accepte autre arg or la privateKey?!!!!!
     const signer = new ethers.Wallet(privateKey);
+    
     console.log("this is the signer", signer)
     console.log("thiis is signer address",signer.address)
    // Get first allowlisted address
@@ -34,7 +37,7 @@ const Otentix = await OtentixFactory.deploy(
 
 await Otentix.deployed();
 
-console.log("Contract deployed by: ", signer.address);
+console.log("Contract deployed by: ", Otentix.address);
 recover = await Otentix.recoverSigner(messageHash, signature);
 console.log("Message was signed by here verif ( recover): ", recover.toString());
 getHash = await Otentix.getHash(recover.toString());

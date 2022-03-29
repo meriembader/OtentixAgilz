@@ -89,8 +89,8 @@ class AuctionsThree extends Component {
                             {/* Intro */}
                             <div className="intro d-flex justify-content-between align-items-end m-0">
                                 <div className="intro-content">
-                                    <span>{this.state.initData.pre_heading}</span>
-                                    <h3 className="mt-3 mb-0">{this.state.initData.heading}</h3>
+                                    <span>Otentix</span>
+                                    <h3 className="mt-3 mb-0">Mint Your nft</h3>
                                 </div>
                                 <div className="intro-btn">
                                     <a className="btn content-btn" href="/auctions">{this.state.initData.btnText}</a>

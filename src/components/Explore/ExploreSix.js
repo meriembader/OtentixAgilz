@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 const initData = {
-    pre_heading: "Explore",
+    pre_heading: "explor 5",
     heading: "Exclusive Digital Assets",
     content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum obcaecati dignissimos quae quo ad iste ipsum officiis deleniti asperiores sit.",
     filter_1: "All",
@@ -21,57 +21,8 @@ const data = [
         content: "ERC-729",
         price: "4.37 BNB",
         likes: "154"
-    },
-    {
-        id: "2",
-        group: '["music"]',
-        img: "/img/auction_2.jpg",
-        author: "/img/avatar_2.jpg",
-        title: "Walking On Air",
-        content: "ERC-543",
-        price: "2.37 BNB",
-        likes: "74"
-    },
-    {
-        id: "3",
-        group: '["music","collectibles"]',
-        img: "/img/auction_3.jpg",
-        author: "/img/avatar_3.jpg",
-        title: "Trading Cards",
-        content: "ERC-932",
-        price: "1.89 BNB",
-        likes: ""
-    },
-    {
-        id: "4",
-        group: '["music","sports","art","collectibles"]',
-        img: "/img/auction_4.jpg",
-        author: "/img/avatar_4.jpg",
-        title: "Sports",
-        content: "ERC-250",
-        price: "0.74 BNB",
-        likes: "184"
-    },
-    {
-        id: "5",
-        group: '["sports","art","music"]',
-        img: "/img/auction_5.jpg",
-        author: "/img/avatar_5.jpg",
-        title: "Cartoon Heroes",
-        content: "ERC-167",
-        price: "4.23 BNB",
-        likes: "126"
-    },
-    {
-        id: "6",
-        group: '["art","sports"]',
-        img: "/img/auction_6.jpg",
-        author: "/img/avatar_6.jpg",
-        title: "Domain Names",
-        content: "ERC-037",
-        price: "3.41 BNB",
-        likes: "23"
     }
+  
 ]
 
 class ExploreSix extends Component {

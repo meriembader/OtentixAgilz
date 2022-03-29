@@ -37,6 +37,8 @@ class ExploreTwo extends Component {
                             </div>
                         </div>
                     </div>
+                    <br>
+                    </br>
                     <div className="row items">
                         {this.state.exploreData.map((item, idx) => {
                             return (
