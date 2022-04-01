@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
 import AuthorProfile from "../AuthorProfile/AuthorProfile";
+import { ethers } from 'ethers';
+import Otentix from '../../artifacts/contracts/Otentix.sol/Otentix.json';
+const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+// get the end user
+const signer = provider.getSigner();
+
+
+// get the smart contract
+const contract = new ethers.Contract(contractAddress, Otentix.abi, signer);
 
 class Create extends Component {
     render() {
@@ -50,32 +60,8 @@ class Create extends Component {
                                             <input type="text" className="form-control" name="royality" placeholder="Royality" required="required" />
                                         </div>
                                     </div>
-                                    <div className="col-12 col-md-6">
-                                        <div className="form-group">
-                                            <input type="text" className="form-control" placeholder="Size" required="required" />
-                                        </div>
-                                    </div>
-                                    <div className="col-12 col-md-6">
-                                        <div className="form-group">
-                                            <input type="text" className="form-control" name="copies" placeholder="No of Copies" required="required" />
-                                        </div>
-                                    </div>
-                                    <div className="col-12">
-                                        <div className="form-group mt-3">
-                                            <div className="form-check form-check-inline">
-                                                <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" defaultValue="option1" defaultChecked />
-                                                <label className="form-check-label" htmlFor="inlineRadio1">Put on Sale</label>
-                                            </div>
-                                            <div className="form-check form-check-inline">
-                                                <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" defaultValue="option2" />
-                                                <label className="form-check-label" htmlFor="inlineRadio2">Instant Sale Price</label>
-                                            </div>
-                                            <div className="form-check form-check-inline">
-                                                <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" defaultValue="option3" />
-                                                <label className="form-check-label" htmlFor="inlineRadio3">Unlock Purchased</label>
-                                            </div>
-                                        </div>
-                                    </div>
+                                   
+                                  
                                     <div className="col-12">
                                         <button className="btn w-100 mt-3 mt-sm-4" type="submit">Create Item</button>
                                     </div>
