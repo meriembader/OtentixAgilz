@@ -65,7 +65,6 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
         baseTokenURI = _baseTokenURI;
     }
 
-
     // Allowlist addresses pour assuer qu'un wallet ne peut minté qu'une seule fois 
     //called only by contract's owner and that can add one more addr to isAllowlistAdr mapping 
     //ne peut etre appellé que par l'owner du contrat
@@ -224,5 +223,13 @@ function UploadToIPFS ( address to, string memory hash, string memory metadata) 
     return newItemId;
 
 }
+
+  function set(string x) public {
+    ipfsHash = x;
+  }
+
+  function get() public view returns (string) {
+    return ipfsHash;
+  }
 
 }
