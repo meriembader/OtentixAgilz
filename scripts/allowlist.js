@@ -38,9 +38,9 @@ const Otentix = await OtentixFactory.deploy(
 await Otentix.deployed();
 
 console.log("Contract deployed by: ", Otentix.address);
-recover = await Otentix.recoverSigner(messageHash, signature);
+const recover = await Otentix.recoverSigner(messageHash, signature);
 console.log("Message was signed by here verif ( recover): ", recover.toString());
-getHash = await Otentix.getHash(recover.toString());
+//getHash = await Otentix.getHash(recover.toString());
 //console.log("message re-crypt :p here ==>", getHash);
 }
 const runMain = async () => {

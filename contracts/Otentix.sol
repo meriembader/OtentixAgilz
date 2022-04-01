@@ -34,10 +34,15 @@ mapping(address => bool) public isAllowlistAddress;
 // will track if a particular signature has already been used to mint
       mapping(bytes => bool) public signatureUsed;
 // mapping to insure that any token has a unique URI
-    mapping(string => uint8) hashes;
+mapping(string => uint8) hashes;
+
+      uint256 listingPrice = 0.025 ether;
+ //   address payable owner;
+
+//mapping(uint256 => MarketItem) private idToMarketItem;
 constructor(string memory baseURI) ERC721("Otentix", "nft") {
      setBaseURI(baseURI);
-} 
+}
 
 /*function reserveNFTs() public onlyOwner {
   //check the total number of NFTs minted
@@ -51,6 +56,7 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
           _mintSingleNFT();
      }
 }*/
+
  function _baseURI() internal view virtual override returns (string memory) {
         return baseTokenURI;
     }
@@ -58,19 +64,7 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
     function setBaseURI(string memory _baseTokenURI) public onlyOwner {
         baseTokenURI = _baseTokenURI;
     }
-    function mintHashNFT(address recipient , string memory hash) public returns (uint256) {
-      require(hashes[hash] != 1, 'NFT already minted!');
-        hashes[hash] = 1;
-        _tokenIds.increment();
-        uint256 newItemId = _tokenIds.current();
-        _mint(recipient, newItemId);
-        _setTokenURI(newItemId, hash);
-    
-     return newItemId;
-}
- function isContentOwned(string memory hash) public view returns (bool) {
-        return hashes[hash] == 1;
-    }
+
 
     // Allowlist addresses pour assuer qu'un wallet ne peut minté qu'une seule fois 
     //called only by contract's owner and that can add one more addr to isAllowlistAdr mapping 
@@ -80,7 +74,6 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
         isAllowlistAddress[wAddresses[i]] = true;
     }
 }
-
 // get the hashed addr of alowlist and the signature as argument 
 // ==> output the addr of the signer
  function recoverSigner(bytes32 hash, bytes memory signature) public pure returns (address) {
@@ -90,8 +83,7 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
     // use this function to  hash  string
     function getHash(string memory str) public pure returns (bytes32) {
         return keccak256(abi.encodePacked(str));
-    }
-    
+    }  
 function mintNFTs(uint _count) public payable {
      uint totalMinted = _tokenIds.current();
      //test 1 : have enough nfts for the caller to mint
@@ -99,7 +91,6 @@ function mintNFTs(uint _count) public payable {
        totalMinted.add(_count) <= MAX_SUPPLY, "Not enough NFTs!"
      );
      // test 2 : the caller has requested to mint more than 0 and less than the min the maxi nbre of nft allowed per transac
-     
      require(
        _count > 0 && _count <= MAX_PER_MINT, 
        "Cannot mint specified number of NFTs."
@@ -117,23 +108,21 @@ function mintNFTs(uint _count) public payable {
 // Presale mints
 //fonction qui n'autorise que les adresses autorisées à créer.
 function preSale(uint _count, bytes32 hash, bytes memory signature) public payable {
-    uint totalMinted = _tokenIds.current();
-   
+    uint totalMinted = _tokenIds.current();   
     require(totalMinted.add(_count) <= MAX_SUPPLY, 
             "Not enough NFTs left!");
-
            //test to check if addr of the signer is allowed 
     require(recoverSigner(hash, signature) == owner(), 
             "Address is not allowlisted");
     require(!signatureUsed[signature], 
             "Signature has already been used.");
-
     for (uint i = 0; i < _count; i++) {
         _mintSingleNFT();
     }
     //track  signature has already been used to mint
     signatureUsed[signature] = true;
 }
+
 function _mintSingleNFT() private {
   //get the current ID that hasn’t been minted yet
       uint newTokenID = _tokenIds.current();
@@ -142,7 +131,6 @@ function _mintSingleNFT() private {
       // increment the token IDs counter by 1
       _tokenIds.increment();
 }
-
 
 //to know which NFTs each user holds
 // return how many tokens a particular owner holds
@@ -157,7 +145,28 @@ function _mintSingleNFT() private {
         }
         return tokensId;
     }
+        function safeMint(address to, string memory uri) public onlyOwner {
+        uint256 tokenId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        _safeMint(to, tokenId);
+        _setTokenURI(tokenId, uri);
+    }
+    function payToMint(
+        address recipient,
+        string memory metadataURI
+    ) public payable returns (uint256) {
+        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
+        require (msg.value >= 0.05 ether, 'Need to pay up!');
 
+        uint256 newItemId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        existingURIs[metadataURI] = 1;
+
+        _mint(recipient, newItemId);
+        _setTokenURI(newItemId, metadataURI);
+
+        return newItemId;
+    }
 // to withdraw the contract’s entire balance
       function withdraw() public payable onlyOwner {
         uint balance = address(this).balance;
@@ -173,7 +182,6 @@ function _mintSingleNFT() private {
         return _tokenIds.current();
     }
 
-
    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
         internal
         override(ERC721, ERC721Enumerable)
@@ -183,6 +191,9 @@ function _mintSingleNFT() private {
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
+    }
+    function isContentOwned(string memory uri) public view returns (bool) {
+        return existingURIs[uri] == 1;
     }
 
     function tokenURI(uint256 tokenId)
@@ -202,4 +213,16 @@ function _mintSingleNFT() private {
     {
         return super.supportsInterface(interfaceId);
     }
+
+function UploadToIPFS ( address to, string memory hash, string memory metadata) public returns (uint256){
+    require(hashes[hash] !=1);
+    hashes[hash]= 1;
+    _tokenIdCounter.increment();
+    uint256 newItemId = _tokenIds.current();
+    _mint(to, newItemId);
+    _setTokenURI(newItemId, metadata);
+    return newItemId;
+
+}
+
 }

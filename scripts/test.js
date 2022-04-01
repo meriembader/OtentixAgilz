@@ -1,13 +1,32 @@
-const { utils } = require("ethers");
+// We require the Hardhat Runtime Environment explicitly here. This is optional
+// but useful for running the script in a standalone fashion through `node <script>`.
+//
+// When running the script with `npx hardhat run <script>` you'll find the Hardhat
+// Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
+
 async function main() {
-    const baseTokenURI = "ipfs://Qmf2kq9RaoQobYYb2Bzpv2zNGDVft4tuf6k7znSGV2k86f/";
+  // Hardhat always runs the compile task when running scripts with its command
+  // line interface.
+  //
+  // If this script is run directly using `node` you may want to call compile
+  // manually to make sure everything is compiled
+  // await hre.run('compile');
 
-    const contractFactory = await hre.ethers.getContractFactory("Otentix");
-    const contract = await contractFactory.deploy(baseTokenURI);
-   // Wait for this transaction to be mined
-   await contract.deployed();
+  // We get the contract to deploy
+  const OtentixTwo = await hre.ethers.getContractFactory("OtentixTwo");
+  const ott = await OtentixTwo.deploy();
 
-   // Get contract address
-   console.log("Contract deployed to:", contract.address);
-};
+  await ott.deployed();
+
+  console.log("OtentixTwo NFT deployed to:", ott.address);
+}
+
+// We recommend this pattern to be able to use async/await everywhere
+// and properly handle errors.
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
