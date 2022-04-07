@@ -56,7 +56,6 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
           _mintSingleNFT();
      }
 }*/
-
  function _baseURI() internal view virtual override returns (string memory) {
         return baseTokenURI;
     }
@@ -64,7 +63,6 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
     function setBaseURI(string memory _baseTokenURI) public onlyOwner {
         baseTokenURI = _baseTokenURI;
     }
-
     // Allowlist addresses pour assuer qu'un wallet ne peut minté qu'une seule fois 
     //called only by contract's owner and that can add one more addr to isAllowlistAdr mapping 
     //ne peut etre appellé que par l'owner du contrat
@@ -121,7 +119,6 @@ function preSale(uint _count, bytes32 hash, bytes memory signature) public payab
     //track  signature has already been used to mint
     signatureUsed[signature] = true;
 }
-
 function _mintSingleNFT() private {
   //get the current ID that hasn’t been minted yet
       uint newTokenID = _tokenIds.current();
@@ -130,7 +127,6 @@ function _mintSingleNFT() private {
       // increment the token IDs counter by 1
       _tokenIds.increment();
 }
-
 //to know which NFTs each user holds
 // return how many tokens a particular owner holds
 
@@ -180,21 +176,18 @@ function _mintSingleNFT() private {
        function count() public view returns (uint256) {
         return _tokenIds.current();
     }
-
    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
         internal
         override(ERC721, ERC721Enumerable)
     {
         super._beforeTokenTransfer(from, to, tokenId);
     }
-
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
     }
     function isContentOwned(string memory uri) public view returns (bool) {
         return existingURIs[uri] == 1;
     }
-
     function tokenURI(uint256 tokenId)
         public
         view
@@ -213,7 +206,7 @@ function _mintSingleNFT() private {
         return super.supportsInterface(interfaceId);
     }
 
-function UploadToIPFS ( address to, string memory hash, string memory metadata) public returns (uint256){
+function UploadToIPFS ( address to, string memory hash, string memory metadata) public onlyOwner returns (uint256){
     require(hashes[hash] !=1);
     hashes[hash]= 1;
     _tokenIdCounter.increment();
@@ -221,15 +214,13 @@ function UploadToIPFS ( address to, string memory hash, string memory metadata) 
     _mint(to, newItemId);
     _setTokenURI(newItemId, metadata);
     return newItemId;
-
 }
-
-  function set(string x) public {
+ /* function set(string x) public {
     ipfsHash = x;
   }
 
   function get() public view returns (string) {
     return ipfsHash;
   }
-
+*/
 }

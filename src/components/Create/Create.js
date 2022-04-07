@@ -3,16 +3,88 @@ import AuthorProfile from "../AuthorProfile/AuthorProfile";
 import { ethers } from 'ethers';
 import getWeb3 from '../utils/getWeb3';
 import ipfs from '../utils/ipfs';
+import { pinJSONToIPFS } from "../utils/ipfs";
 import Otentix from '../../artifacts/contracts/Otentix.sol/Otentix.json';
+const fs = require("fs");
+const FormData = require("form-data");
+const axios = require("axios");
+require('dotenv').config();
+
+
+const key = process.env.pinataApiKey;
+const secret = process.env.pinataSecretApiKey;
+
 const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 // get the end user
 const signer = provider.getSigner();
 
-
-
 class Create extends Component {
 
+//test if owner already connected to metamask
+   connectWallet = async () => {
+    if (window.ethereum) {
+      try {
+        const addressArray = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        const obj = {
+          status: "👆🏽 Write a message in the text-field above.",
+          address: addressArray[0],
+        };
+        return obj;
+      } catch (err) {
+        return {
+          address: "",
+          status: "😥 " + err.message,
+        };
+      }
+    } else {
+      return {
+        address: "",
+        status: (
+          <span>
+            <p>
+              {" "}
+              🦊{" "}
+              <a target="_blank" href={`https://metamask.io/download.html`} rel="noreferrer">
+                You must install Metamask, a virtual Ethereum wallet, in your
+                browser.
+              </a>
+            </p>
+          </span>
+        ),
+      };
+    }
+  };
+  
+  pinJSONToIPFS = async(JSONBody) => {
+    const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
+      //making axios POST request to Pinata 
+
+ return axios
+        .post(url, JSONBody, {
+            headers: {
+                pinata_api_key: key,
+                pinata_secret_api_key: secret,
+            }
+        })
+        .then(function (response) {
+           return {
+               success: true,
+               pinataUrl: "https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash
+           };
+        })
+        .catch(function (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: error.message,
+            }
+
+    });
+};  
+  
     constructor(props) {
         super(props)
     
@@ -74,14 +146,11 @@ class Create extends Component {
       }
       onSubmit(event) {
         event.preventDefault()
-        ipfs.files.add(this.state.buffer, (error, result) => {
-          if(error) {
-            console.error(error)
-            return
-          }
-          this.OtentixInstance.set(result[0].hash, { from: this.state.account }).then((r) => {
-            return this.setState({ ipfsHash: result[0].hash })
-            console.log('ifpsHash', this.state.ipfsHash)
+       ipfs.files.add(this.state.buffer, (error, result) => {
+          this.OtentixInstance.UploadToIPFS(result[0].hash, { from: this.state.account }).then((r) => {
+           
+            return this.setState({ ipfsHash: result[0].hash }, console.log('ifpsHash', this.state.ipfsHash));
+     
           })
         })
       }
@@ -110,37 +179,19 @@ class Create extends Component {
                                             <div className="custom-file">
                                                 <input type="file" className="custom-file-input" id="inputGroupFile01" onChange={this.captureFile}/>
                                                 <label className="custom-file-label" htmlFor="inputGroupFile01">Choose file</label>
-                                                <img src={`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt=""/>
+                                               
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-12">
-                                        <div className="form-group mt-3">
-                                            <input type="text" className="form-control" name="name" placeholder="Item Name"  />
-                                        </div>
-                                    </div>
-                                    <div className="col-12">
-                                        <div className="form-group">
-                                            <textarea className="form-control" name="textarea" placeholder="Description" cols={30} rows={3} defaultValue={""} />
-                                        </div>
-                                    </div>
-                                    <div className="col-12 col-md-6">
-                                        <div className="form-group">
-                                            <input type="text" className="form-control" name="price" placeholder="Item Price"  />
-                                        </div>
-                                    </div>
-                                    <div className="col-12 col-md-6">
-                                        <div className="form-group">
-                                            <input type="text" className="form-control" name="royality" placeholder="Royality"  />
-                                        </div>
-                                    </div>
                                    
-                                  
+                            
                                     <div className="col-12">
                                         <button className="btn w-100 mt-3 mt-sm-4" type="submit">Create Item</button>
+                                       
                                     </div>
                                 </div>
                             </form>
+                            <img src={`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt=""/>
                         </div>
                     </div>
                 </div>
