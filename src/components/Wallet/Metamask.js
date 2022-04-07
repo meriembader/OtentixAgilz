@@ -34,9 +34,6 @@ const Metamask = (props) => {
       history.push("/")
    //   props.onLogin(provider);
     };
-  
-  
-    
         return (
             <section className="author-area">
                 <div className="container">
