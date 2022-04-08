@@ -10,11 +10,10 @@ const FormData = require("form-data");
 const axios = require("axios");
 require('dotenv').config();
 
-
 const key = process.env.pinataApiKey;
 const secret = process.env.pinataSecretApiKey;
 
-const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+const contractAddress = process.env.contractAddress;
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 // get the end user
 const signer = provider.getSigner();
@@ -59,7 +58,7 @@ class Create extends Component {
   };
   
   pinJSONToIPFS = async(JSONBody) => {
-    const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
+    const url = process.env.url;
       //making axios POST request to Pinata 
 
  return axios
@@ -72,7 +71,7 @@ class Create extends Component {
         .then(function (response) {
            return {
                success: true,
-               pinataUrl: "https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash
+               pinataUrl: process.env.pinataUrl + response.data.IpfsHash
            };
         })
         .catch(function (error) {
@@ -81,79 +80,8 @@ class Create extends Component {
                 success: false,
                 message: error.message,
             }
-
     });
 };  
-  
-    constructor(props) {
-        super(props)
-    
-        this.state = {
-          ipfsHash: '',
-          web3: null,
-          buffer: null,
-          account: null
-        }
-        this.captureFile = this.captureFile.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-      }
-
-      componentWillMount() {
-        // Get network provider and web3 instance.
-        // See utils/getWeb3 for more info.
-    
-        getWeb3
-        .then(results => {
-          this.setState({
-            web3: results.web3
-          })
-    
-          // Instantiate contract once web3 provided.
-          this.instantiateContract()
-        })
-        .catch(() => {
-          console.log('Error finding web3.')
-        })
-      }
-      instantiateContract() {
-
-    // get the smart contract
-    const contract = new ethers.Contract(contractAddress, Otentix.abi, signer);
-    contract.setProvider(this.state.web3.currentProvider)
-
-     // Get accounts.
-     this.state.web3.eth.getAccounts((error, accounts) => {
-        Otentix.deployed().then((instance) => {
-          this.OtentixInstance = instance
-          this.setState({ account: accounts[0] })
-          // Get the value from the contract to prove it worked.
-          return this.OtentixInstance.get.call(accounts[0])
-        }).then((ipfsHash) => {
-          // Update state with the result.
-          return this.setState({ ipfsHash })
-        })
-      })
-      }
-      captureFile(event) {
-        event.preventDefault()
-        const file = event.target.files[0]
-        const reader = new window.FileReader()
-        reader.readAsArrayBuffer(file)
-        reader.onloadend = () => {
-          this.setState({ buffer: Buffer(reader.result) })
-          console.log('buffer', this.state.buffer)
-        }
-      }
-      onSubmit(event) {
-        event.preventDefault()
-       ipfs.files.add(this.state.buffer, (error, result) => {
-          this.OtentixInstance.UploadToIPFS(result[0].hash, { from: this.state.account }).then((r) => {
-           
-            return this.setState({ ipfsHash: result[0].hash }, console.log('ifpsHash', this.state.ipfsHash));
-     
-          })
-        })
-      }
     render() {
         return (
             <section className="author-area">
