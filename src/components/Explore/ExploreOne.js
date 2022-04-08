@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 const initData = {
     pre_heading: "explore 1",
-    heading: "NFT",
+    heading: "NFTttttttttt",
     btn_1: "View All",
     btn_2: "Load More"
 }

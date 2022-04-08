@@ -10,68 +10,31 @@ const FormData = require("form-data");
 const axios = require("axios");
 require('dotenv').config();
 
+
 const key = process.env.pinataApiKey;
 const secret = process.env.pinataSecretApiKey;
 
-const contractAddress = process.env.contractAddress;
+const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 // get the end user
 const signer = provider.getSigner();
 
 class Create extends Component {
-
-//test if owner already connected to metamask
-   connectWallet = async () => {
-    if (window.ethereum) {
-      try {
-        const addressArray = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        const obj = {
-          status: "👆🏽 Write a message in the text-field above.",
-          address: addressArray[0],
-        };
-        return obj;
-      } catch (err) {
-        return {
-          address: "",
-          status: "😥 " + err.message,
-        };
-      }
-    } else {
-      return {
-        address: "",
-        status: (
-          <span>
-            <p>
-              {" "}
-              🦊{" "}
-              <a target="_blank" href={`https://metamask.io/download.html`} rel="noreferrer">
-                You must install Metamask, a virtual Ethereum wallet, in your
-                browser.
-              </a>
-            </p>
-          </span>
-        ),
-      };
-    }
-  };
-  
   pinJSONToIPFS = async(JSONBody) => {
-    const url = process.env.url;
+    const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
       //making axios POST request to Pinata 
 
  return axios
         .post(url, JSONBody, {
             headers: {
-                pinata_api_key: key,
-                pinata_secret_api_key: secret,
+                pinata_api_key:  "78fb0ae226b2a0f74044",
+                pinata_secret_api_key: "35cb7148151e5af3b291c47560e9b8ea61547c38f02c34838bcf0d2d73d554cb",
             }
         })
         .then(function (response) {
            return {
                success: true,
-               pinataUrl: process.env.pinataUrl + response.data.IpfsHash
+               pinataUrl: "https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash
            };
         })
         .catch(function (error) {
@@ -80,8 +43,86 @@ class Create extends Component {
                 success: false,
                 message: error.message,
             }
+
     });
 };  
+  
+    constructor(props) {
+        super(props)
+    
+        this.state = {
+          ipfsHash: '',
+          web3: null,
+          buffer: null,
+          account: null,
+          file: null
+        }
+        this.captureFile = this.captureFile.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+      }
+
+      componentWillMount() {
+        // Get network provider and web3 instance.
+        // See utils/getWeb3 for more info.
+    
+        getWeb3
+        .then(results => {
+          this.setState({
+            web3: results.web3
+          })
+    
+          // Instantiate contract once web3 provided.
+          this.instantiateContract()
+        })
+        .catch(() => {
+          console.log('Error finding web3.')
+        })
+      }
+      instantiateContract() { 
+     
+           // then print response status
+    // get the smart contract
+    const contract = new ethers.Contract(contractAddress, Otentix.abi, signer);
+    contract.setProvider(this.state.web3.currentProvider)
+
+     // Get accounts.
+     this.state.web3.eth.getAccounts((error, accounts) => {
+        Otentix.deployed().then((instance) => {
+          this.OtentixInstance = instance
+          this.setState({ account: accounts[0] })
+          // Get the value from the contract to prove it worked.
+          return this.OtentixInstance.get.call(accounts[0])
+        }).then((ipfsHash) => {
+          // Update state with the result.
+          return this.setState({ ipfsHash })
+        })
+      })
+      }
+      captureFile(event) {
+        event.preventDefault()
+        const file = event.target.files[0]
+        this.setState({...this.state, file:file})
+        const reader = new window.FileReader()
+        reader.readAsArrayBuffer(file)
+        reader.onloadend = () => {
+          this.setState({ buffer: Buffer(reader.result) })
+          console.log('buffer', this.state.buffer)
+        }
+      }
+      onSubmit (event) {
+        event.preventDefault()
+        let data = new FormData();
+        data.append('file',(this.state.file));
+           ipfs(this.state.buffer, data).then((result) => console.log("this is resultttttt", result))
+          
+    /*   ipfs.files.add(this.state.buffer, (error, result) => {
+          this.OtentixInstance.UploadToIPFS(result[0].hash, { from: this.state.account }).then((r) => {
+           
+            return this.setState({ ipfsHash: result[0].hash }, console.log('ifpsHash', this.state.ipfsHash));
+     
+          })
+        })*/
+      }
     render() {
         return (
             <section className="author-area">
