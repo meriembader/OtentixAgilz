@@ -94,9 +94,7 @@ function ExploreOne()  {
             <section className="explore-area load-more p-0">
                 <div className="container">
                    
-                    <div className="row items">
-                   
-                         
+                    <div className="row items">     
                                 <div className="col-12 col-sm-6 col-lg-3 item">
                                     <div className="card">
                                         <div className="image-over">
@@ -127,7 +125,7 @@ function ExploreOne()  {
                                                     <QrSigner
                                                     size={300}
                                                     scan={scan}
-                                                    account ='0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
+                                                    account ='0x007311b88A03af17dbb37B47ab7C9Ab556708D56'
                                                     srlp='QmYNuGHzCj95qa2ZiDmC4vGPSPwmbH3H9avW4gpuzfNGm4'
                                                     onScan={(signature) =>({ signature })}
                                                     />
