@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@pinata/ipfs-gateway-tools": "^1.2.0",
+    "@susy-js/qr-signer": "^0.3.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -12,6 +13,7 @@
     "form-data": "^4.0.0",
     "ipfs-api": "^26.1.2",
     "ipfs-http-client": "^56.0.2",
+    "pinata-ipfs-http-client": "^42.0.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "^5.2.1",
