@@ -2,7 +2,7 @@ import React,{ useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import Otentix from '../../artifacts/contracts/Otentix.sol/Otentix.json';
 import QrSigner from '@susy-js/qr-signer'
-const contractAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
+const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
 //const contractAddress = process.env.contractAddress;
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -16,10 +16,8 @@ const contract = new ethers.Contract(contractAddress, Otentix.abi, signer);
 
 function ExploreOne()  {
   
-   
     const [totalMinted, setTotalMinted] = useState(0);
     useEffect(() => {
-   
         getCount();
       }, []);
       const getCount = async () => {
@@ -29,10 +27,8 @@ function ExploreOne()  {
         console.log("thiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiis countt",parseInt(count));
         setTotalMinted(parseInt(count));
       };
-    
       return (
         <div>
-   
           <div className="container">
             <div className="row">
             {Array(totalMinted + 1)
@@ -47,7 +43,6 @@ function ExploreOne()  {
         </div>
       );
     }
-
     function NFTImage({ tokenId, getCount }) {
         const contentId = 'QmYNuGHzCj95qa2ZiDmC4vGPSPwmbH3H9avW4gpuzfNGm4';
         const metadataURI = `${contentId}/${tokenId}.json`;
@@ -73,13 +68,11 @@ function ExploreOne()  {
           console.log("metadate uri=====>", metadataURI);
           const result = await contract.payToMint(addr, metadataURI, {
             value: ethers.utils.parseEther('0.05'),
-          });
-      
+          });      
           await result.wait();
           getMintedStatus();
           getCount();
-        };
-      
+        };      
         async function getURI() {
           const uri = await contract.tokenURI(tokenId);
           alert(uri);
@@ -116,20 +109,14 @@ function ExploreOne()  {
                                                         Mint
                                                     </button>
                                                     ) : (
-                                                    <button className="btn btn-secondary" onClick={getURI}>
-                                                        Taken! Show URI
+                                                    <button className="btn btn-bordered-white btn-smaller mt-3"  onClick={() =>({ scan: !scan })}>
+                                                        Generate QR Code
                                                     </button>
                                                     )}
                                                 </div>
                                                 <div>
-                                                    <QrSigner
-                                                    size={300}
-                                                    scan={scan}
-                                                    account ='0x007311b88A03af17dbb37B47ab7C9Ab556708D56'
-                                                    srlp='QmYNuGHzCj95qa2ZiDmC4vGPSPwmbH3H9avW4gpuzfNGm4'
-                                                    onScan={(signature) =>({ signature })}
-                                                    />
-                                                <a className="btn btn-bordered-white btn-smaller mt-3"  onClick={() =>({ scan: !scan })}><i className="icon-handbag mr-2" />Generate QR CODE </a>
+                                              
+                                              
                                             </div>
                                             </div>
                                         </div>

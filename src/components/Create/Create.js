@@ -22,56 +22,51 @@ const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 const myipfsHash=''
 const file=null
-class Create extends Component {
-  state = {
-    myipfsHash: '',
-    file: null
-}
+function Create()  {
+    const [file, setFile] = useState()
+    const [myipfsHash, setIPFSHASH] = useState('')
+   
+       
+  const handleFile=async (fileToHandle) =>{
+    console.log('starting')
 
-componentDidMount(){
-    this.setState({
-      myipfsHash: myipfsHash,
-      setfile: file
-    })
-    this.setState({file: "setFile"});
-}
-    
-      
-       handleFile=async (fileToHandle) =>{
-        console.log('starting')
+    // initialize the form data
+    const formData = new FormData()
 
-        
-        // initialize the form data
-        const formData = new FormData()
-    
-        // append the file form data to 
-        formData.append("file", fileToHandle)
-        console.log("this is the file", fileToHandle)
+    // append the file form data to 
+    formData.append("file", fileToHandle)
+console.log("choosen file", fileToHandle)
+    // call the keys from .env
 
     const API_KEY = process.env.REACT_APP_API_KEY
     const API_SECRET = process.env.REACT_APP_API_SECRET
 
+    // the endpoint needed to upload the file
     const url =  `https://api.pinata.cloud/pinning/pinFileToIPFS`
 
+ 
     const response = await axios.post(
-     url,formData ,
-      {
-          maxContentLength: "Infinity",
-          headers: {
-              "Content-Type": `multipart/form-formData;boundary=${formData._boundary}`, 
-              pinata_api_key: API_KEY,
-              pinata_secret_api_key: API_SECRET
-
-          }
-      }
-  )
-console.log(response)
-  // get the hash
-  this.state.myipfsHash(response.data.IpfsHash);
-
-       }
-     
-    render() {
+        url,
+        formData,
+        {
+            maxContentLength: "Infinity",
+            headers: {
+                
+                pinata_api_key: '1500252925f330916fad',
+                pinata_secret_api_key: '9ad46efc7ca8ded9ebf1b14ddd3c24fc17caddaf17360fb0d48ffd65b66cfdc4'
+  
+            }
+        }
+    )
+  
+    console.log(response)
+  
+    // get the hash
+    setIPFSHASH(response.data.IpfsHash)
+  
+    
+    }
+  
         return (
             <section className="author-area">
                 <div className="container">
@@ -89,31 +84,35 @@ console.log(response)
                                 </div>
                             </div>
                             {/* Item Form */}
-                            <form className="item-form card no-hover" onClick={()=>this.handleFile(file)} >
+                          
                                 <div className="row">
                                     <div className="col-12">
                                         <div className="input-group form-group">
                                             <div className="custom-file">
-                                                <input type="file" className="custom-file-input" id="inputGroupFile01" onChange={(event)=>this.state.file(event.target.files[0])}/>
+                                                <input type="file" className="custom-file-input" id="inputGroupFile01"onChange={(event)=>setFile(event.target.files[0])}/>
                                                 <label className="custom-file-label" htmlFor="inputGroupFile01">Choose file</label>
                                                
                                             </div>
                                         </div>
                                     </div>
-                                   
-                            
+                                        
                                     <div className="col-12">
-                                        <button className="btn w-100 mt-3 mt-sm-4" type="submit">Create Item</button> 
+                                        <button className="btn w-100 mt-3 mt-sm-4"onClick={()=>handleFile(file)} type="submit">Create Item</button> 
                                     </div>
                                 </div>
-                            </form>
-                            <img src={`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt=""/>
+                                {
+
+                            //  render the hash
+                            myipfsHash.length > 0 && <img height='200' src={`https://gateway.pinata.cloud/ipfs/${myipfsHash}`} alt='not loading'/>
+                            }
+
+                           
                         </div>
                     </div>
                 </div>
             </section>
         );
-    }
+   
 }
 
 export default Create;

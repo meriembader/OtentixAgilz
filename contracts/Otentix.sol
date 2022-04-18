@@ -170,7 +170,6 @@ function _mintSingleNFT() private {
         (bool success, ) = (msg.sender).call{value: balance}("");
         require(success, "Transfer failed.");
     }
-
     // The following functions are overrides required by Solidity.
 
        function count() public view returns (uint256) {
