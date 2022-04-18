@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@pinata/ipfs-gateway-tools": "^1.2.0",
+    "@pinata/ipfs-gateway-tools": "^1.3.0",
     "@susy-js/qr-signer": "^0.3.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",

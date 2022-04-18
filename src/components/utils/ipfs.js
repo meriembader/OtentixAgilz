@@ -4,7 +4,8 @@ const secret = process.env.pinataSecretApiKey;
 const axios = require('axios');
 
  const pinFileToIPFS = async(JSONBody, data) => {
-    const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+    const url =  `https://otentix.mypinata.cloud/pinning/pinFileToIPFS`
+
       //making axios POST request to Pinata 
       //const JWT = process.env.JWT;
 
