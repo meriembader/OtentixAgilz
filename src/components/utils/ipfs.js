@@ -22,7 +22,7 @@ const axios = require('axios');
         .then(function (response) {
            return {
                success: true,
-               pinataUrl: "https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash
+               pinataUrl: "https://otentix.mypinata.cloud/ipfs/" + response.data.IpfsHash
            };
         })
         .catch(function (error) {
