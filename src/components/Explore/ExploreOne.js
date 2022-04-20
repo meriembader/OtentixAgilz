@@ -2,7 +2,7 @@ import React,{ useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import Otentix from '../../artifacts/contracts/Otentix.sol/Otentix.json';
 import QrSigner from '@susy-js/qr-signer'
-const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+const contractAddress = '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9';
 //const contractAddress = process.env.contractAddress;
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -24,7 +24,7 @@ function ExploreOne()  {
         //console.log("iciiiiiiiii ::::::::::::::::::::");
         const count = await contract.count();
         console.log("iciiiiiiiii ::::::::::::::::::::",count);
-        console.log("thiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiis countt",parseInt(count));
+        console.log("thiiiiiiiis countt",parseInt(count));
         setTotalMinted(parseInt(count));
       };
       return (
