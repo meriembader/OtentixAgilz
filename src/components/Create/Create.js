@@ -1,22 +1,10 @@
-import React, { Component, useState } from 'react';
+import React, {useState } from 'react';
 import AuthorProfile from "../AuthorProfile/AuthorProfile";
-import { ethers } from 'ethers';
-import getWeb3 from '../utils/getWeb3';
-import ipfs from '../utils/ipfs';
-import { pinJSONToIPFS } from "../utils/pinata";
-import Otentix from '../../artifacts/contracts/Otentix.sol/Otentix.json';
-const fs = require("fs");
+
 const FormData = require("form-data");
 const axios = require("axios");
 require('dotenv').config();
-const key = process.env.pinataApiKey;
-const secret = process.env.pinataSecretApiKey;
-const contractAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-// get the end user
-const signer = provider.getSigner();
-const myipfsHash=''
-const file=null
+
 function Create()  {
     const [file, setFile] = useState()
     
@@ -54,7 +42,6 @@ console.log("choosen file", fileToHandle)
   
     // get the hash
     setIPFSHASH(response.data.IpfsHash)
-
     }
         return (
             <section className="author-area">

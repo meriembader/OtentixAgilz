@@ -146,22 +146,7 @@ function _mintSingleNFT() private {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
     }
-    function payToMint(
-        address recipient,
-        string memory metadataURI
-    ) public payable returns (uint256) {
-        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
-        require (msg.value >= 0.05 ether, 'Need to pay up!');
-
-        uint256 newItemId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
-        existingURIs[metadataURI] = 1;
-
-        _mint(recipient, newItemId);
-        _setTokenURI(newItemId, metadataURI);
-
-        return newItemId;
-    }
+    
 // to withdraw the contract’s entire balance
       function withdraw() public payable onlyOwner {
         uint balance = address(this).balance;
@@ -205,7 +190,7 @@ function _mintSingleNFT() private {
         return super.supportsInterface(interfaceId);
     }
 
-function UploadToIPFS ( address to, string memory hash, string memory metadata) public onlyOwner returns (uint256){
+function MintERC721 ( address to, string memory hash, string memory metadata) public onlyOwner returns (uint256){
     require(hashes[hash] !=1);
     hashes[hash]= 1;
     _tokenIdCounter.increment();
@@ -214,12 +199,21 @@ function UploadToIPFS ( address to, string memory hash, string memory metadata) 
     _setTokenURI(newItemId, metadata);
     return newItemId;
 }
- /* function set(string x) public {
-    ipfsHash = x;
-  }
 
-  function get() public view returns (string) {
-    return ipfsHash;
-  }
-*/
+function payToMint(address recipient,string memory metadataURI ) public payable returns (uint256) {
+    
+        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
+        require (msg.value >= 0.05 ether, 'Need to pay up!');
+
+        uint256 newItemId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        existingURIs[metadataURI] = 1;
+
+        _mint(recipient, newItemId);
+        _setTokenURI(newItemId, metadataURI);
+
+        return newItemId;
+    }
+ 
+
 }
