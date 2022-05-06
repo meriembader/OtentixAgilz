@@ -16,5 +16,5 @@ npx hardhat run scripts/sample-script.js --network localhost
 npm run dev
 ```
 
-Update the deployed contract address in `compoonents/home.jss` 
+Update the deployed contract address in `compoonents/home.js` 
     
