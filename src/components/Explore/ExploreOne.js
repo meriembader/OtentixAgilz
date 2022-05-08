@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
-
 import { ethers } from 'ethers';
 import Otentix from '../../artifacts/contracts/Otentix.sol/Otentix.json';
-
 const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
-
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
 // get the end user
@@ -14,8 +11,6 @@ console.log("this is the  Otentix.abi", Otentix.abi);
 console.log("this is the  contractAddress",contractAddress);
 // get the smart contract
 const contract = new ethers.Contract(contractAddress, Otentix.abi, signer);
-
-
 function ExploreOne() {
 
   const [totalMinted, setTotalMinted] = useState(0);
@@ -31,13 +26,9 @@ function ExploreOne() {
     console.log("thiiiiiiiiiiiiiiiiiiiiis",parseInt(count));
     setTotalMinted(parseInt(count));
   };
-
   return (
-    
-
+  
     <div>
-
-
 <h3> Mint your collection </h3>
       <div className="container">
         <div className="row">
@@ -53,7 +44,6 @@ function ExploreOne() {
     </div>
   );
 }
-
 function NFTImage({ tokenId, getCount }) {
   const contentId = 'QmYNuGHzCj95qa2ZiDmC4vGPSPwmbH3H9avW4gpuzfNGm4';
   const hash = `${contentId}/${tokenId}.png`;
