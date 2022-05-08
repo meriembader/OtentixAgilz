@@ -1,21 +1,28 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Sidebar from '../Sidebar/Sidebar';
-
-const BASE_URL = "https://my-json-server.typicode.com/themeland/netstorm-json-2/blogSingle";
-
+const data =[
+{
+    image: "/img/nfttt.jpg",
+    title: "The beginner’s guide to creating & selling digital art NFTs",
+    content_1: "Far far away, behind the word mountains, far from the countries Vokalia and coast, there live the blind texts. Separated they live in right at the coast of the Semantics, a large language ocean coast of the Semantics, a large language ocean.",
+    content_2: "A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. There live the blind texts. Separated they live in right at the coast, a large language ocean. Sed nisi nisi, amet, consectetur adipiscing rutrum sit amet elit.",
+    content_3: "Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.",
+    quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quam tortor, ultrices accumsan mauris eget, pulvinar tincidunt erat. Sed nisi nisi, rutrum sit amet elit.",
+    date: "Jul 12, 2022",
+    commentTitle: "Leave a Reply",
+    commentContent: "Sed mauris nulla, tempor eu est vel, dapibus hendrerit mauris.",
+    commentBtn: "POST COMMENT"
+  }
+]
 class BlogSingle extends Component {
     state = {
         data: {}
     }
     componentDidMount(){
-        axios.get(`${BASE_URL}`)
-            .then(res => {
-                this.setState({
-                    data: res.data
-                })
-                // console.log(this.state.data)
-            })
+       this.setState({
+           data : data
+       })
         .catch(err => console.log(err))
     }
     render() {
