@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
-
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
@@ -10,7 +9,6 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-
 // Use the previous contract
 import "./RoleControl.sol";
 contract Otentix is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
@@ -146,7 +144,6 @@ function _mintSingleNFT() private {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
     }
-    
 // to withdraw the contract’s entire balance
       function withdraw() public payable onlyOwner {
         uint balance = address(this).balance;
@@ -208,12 +205,8 @@ function payToMint(address recipient,string memory metadataURI ) public payable 
         uint256 newItemId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         existingURIs[metadataURI] = 1;
-
         _mint(recipient, newItemId);
         _setTokenURI(newItemId, metadataURI);
-
         return newItemId;
     }
- 
-
 }

@@ -9,7 +9,7 @@ const signer = provider.getSigner();
 console.log("this is the signer", signer);
 console.log("this is the  Otentix.abi", Otentix.abi);
 console.log("this is the  contractAddress",contractAddress);
-// get the smart contract
+// get the smart contract<<<<<<<<<<<<
 const contract = new ethers.Contract(contractAddress, Otentix.abi, signer);
 function ExploreOne() {
 
@@ -46,7 +46,7 @@ function ExploreOne() {
 }
 function NFTImage({ tokenId, getCount }) {
   const contentId = 'QmYNuGHzCj95qa2ZiDmC4vGPSPwmbH3H9avW4gpuzfNGm4';
-  const hash = `${contentId}/${tokenId}.png`;
+  const hash = `${contentId}/${tokenId}.json`;
   console.log("==============+=========>", tokenId)
   const imageURI = `https://gateway.pinata.cloud/ipfs/${hash}`;
   //const imageURI = `img/${tokenId}.png`;
