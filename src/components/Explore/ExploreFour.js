@@ -17,9 +17,7 @@ const data = [
         count: "1 of 1",
         btnText: "Place a Bid"
     },
-
 ]
-
 class ExploreFour extends Component {
     state = {
         initData: {},
