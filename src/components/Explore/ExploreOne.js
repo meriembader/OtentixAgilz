@@ -46,7 +46,7 @@ function ExploreOne() {
 }
 function NFTImage({ tokenId, getCount }) {
   const contentId = 'QmYNuGHzCj95qa2ZiDmC4vGPSPwmbH3H9avW4gpuzfNGm4';
-  const hash = `${contentId}/${tokenId}.json`;
+  const hash = `${contentId}/${tokenId}.png`;
   console.log("==============+=========>", tokenId)
   const imageURI = `https://gateway.pinata.cloud/ipfs/${hash}`;
   //const imageURI = `img/${tokenId}.png`;
