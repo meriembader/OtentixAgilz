@@ -29,7 +29,8 @@ function ExploreOne() {
   return (
   
     <div>
-<h3> Mint your collection </h3>
+      <div class="container"><h3> Mint your collection </h3></div>
+
       <div className="container">
         <div className="row">
           {Array(totalMinted + 1)
@@ -45,7 +46,7 @@ function ExploreOne() {
   );
 }
 function NFTImage({ tokenId, getCount }) {
-  const contentId = 'QmYNuGHzCj95qa2ZiDmC4vGPSPwmbH3H9avW4gpuzfNGm4';
+  const contentId = 'QmcoH9AkoK7ruUz2hpnZn8TG5nBT3wte1zg7QUJXF3tyH1';
   const hash = `${contentId}/${tokenId}.png`;
   console.log("==============+=========>", tokenId)
   const imageURI = `https://gateway.pinata.cloud/ipfs/${hash}`;
@@ -83,7 +84,7 @@ function NFTImage({ tokenId, getCount }) {
   }
   return (
     <div className="card" style={{ width: '18rem' }}>
-      <img className="card-img-top" src={isMinted ? imageURI : 'https://gateway.pinata.cloud/ipfs/QmcoH9AkoK7ruUz2hpnZn8TG5nBT3wte1zg7QUJXF3tyH1'}></img>
+      <img className="card-img-top" src={isMinted ? imageURI : '../../img/placeholder.png' }></img>
       <div className="card-body">
         <h5 className="card-title">ID #{tokenId}</h5>
         {!isMinted ? (

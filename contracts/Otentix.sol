@@ -45,7 +45,7 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
 /*function reserveNFTs() public onlyOwner {
   //check the total number of NFTs minted
      uint totalMinted = _tokenIds.current();
-     //test :  if there are enough NFTs to reserve
+     //test :if there are enough NFTs to reserve
      require(
         totalMinted.add(10) < MAX_SUPPLY, "Not enough NFTs"
      );
@@ -53,6 +53,7 @@ constructor(string memory baseURI) ERC721("Otentix", "nft") {
      for (uint i = 0; i < 10; i++) {
           _mintSingleNFT();
      }
+
 }*/
  function _baseURI() internal view virtual override returns (string memory) {
         return baseTokenURI;
