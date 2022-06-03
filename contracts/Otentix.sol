@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "@openzeppelin/contracts/utils/C ounters.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 // Use the previous contract
@@ -156,7 +156,7 @@ function _mintSingleNFT() private {
     // The following functions are overrides required by Solidity.
 
        function count() public view returns (uint256) {
-        return _tokenIds.current();
+        return _tokenIdCounter.current();
     }
    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
         internal
@@ -187,6 +187,7 @@ function _mintSingleNFT() private {
     {
         return super.supportsInterface(interfaceId);
     }
+ 
 
 function MintERC721 ( address to, string memory hash, string memory metadata) public onlyOwner returns (uint256){
     require(hashes[hash] !=1);

@@ -60,7 +60,6 @@ console.log("choosen file", fileToHandle)
 //  render the hash
               myipfsHash.length > 0 && <img height='80' src={`https://otentix.mypinata.cloud/ipfs/${myipfsHash}`} alt='not loading'/>
 }
-
                                         </div>
                                         <br>
                                         </br>
