@@ -20,7 +20,7 @@ function ExploreOne() {
   }, []);
 
   const getCount = async () => {
-    //console.log("iciiiiiiiii ::::::::::::::::::::");
+   //console.log("iciiiiiiiii ::::::::::::::::::::");
     const count = await contract.count();
     console.log("iciiiiiiiii ::::::::::::::::::::",count);
     console.log("thiiiiiiiiiiiiiiiiiiiiis",parseInt(count));
@@ -84,7 +84,7 @@ function NFTImage({ tokenId, getCount }) {
   }
   return (
     <div className="card" style={{ width: '18rem' }}>
-      <img className="card-img-top" src={isMinted ? imageURI : '../../img/placeholder.png' }></img>
+      <img className="card-img-top" src={isMinted ? imageURI : '../../img/placeholder.png'}></img>
       <div className="card-body">
         <h5 className="card-title">ID #{tokenId}</h5>
         {!isMinted ? (
@@ -93,7 +93,8 @@ function NFTImage({ tokenId, getCount }) {
           </button>
         ) : (
           <button className="btn btn-secondary" onClick={getURI}>
-            Taken! Show URI
+            Generate QrCode
+            
           </button>
         )}
       </div>
