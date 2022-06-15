@@ -1,0 +1,19 @@
+[{
+    "description": "test mint.",
+    "image": "https://otentix.mypinata.cloud/ipfs/QmP2e7vT5Gz2FVcVJwqbNMTYxbL1qVdzmuhE5P31gfbWqd",
+    "name": "Skander El Fekih",
+    "attributes": [
+      {
+        "trait_type": "attack",
+        "value": "0"
+      },
+      {
+        "trait_type": "health",
+        "value": "0"
+      },
+      {
+        "trait_type": "speed",
+        "value": "0"
+      }
+    ]
+  }]
